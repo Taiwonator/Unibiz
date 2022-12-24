@@ -17,6 +17,7 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <Button>Button…</Button>
+        <button className="bg-[red]">Button 2</button>
       </main>
     </>
   );

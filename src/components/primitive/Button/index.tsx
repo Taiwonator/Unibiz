@@ -6,7 +6,7 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({ children }) => {
-  return <button className="flex">{children}</button>;
+  return <button className="opacity-50">{children}</button>;
 };
 
 export default Button;
