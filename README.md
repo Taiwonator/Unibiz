@@ -50,6 +50,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
   - Structure
     - Sidebar
   - Core
+    - Sky
   - Primitive
     - Icon
     - Button
