@@ -9,8 +9,27 @@ export default {
 
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
-export const Default = Template.bind({});
+export const Primary = Template.bind({});
+export const Secondary = Template.bind({});
+export const Positive = Template.bind({});
+export const Negative = Template.bind({});
 
-Default.args = {
-  children: 'Hello',
+Primary.args = {
+  children: 'Primary Button',
+  type: 'primary',
+};
+
+Secondary.args = {
+  children: 'Secondary Button',
+  type: 'secondary',
+};
+
+Positive.args = {
+  children: 'Positive Button',
+  type: 'positive',
+};
+
+Negative.args = {
+  children: 'Negative Button',
+  type: 'negative',
 };
