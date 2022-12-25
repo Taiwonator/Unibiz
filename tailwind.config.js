@@ -20,11 +20,25 @@ module.exports = {
       uw: '2560px',
     },
     extend: {
-      width: {},
+      minWidth: {
+        sidebar: '18.75rem',
+      },
+      maxWidth: {
+        1: '1rem',
+        2: '2rem',
+        3: '3rem',
+        4: '4rem',
+        5: '5rem',
+        sidebar: '18.75rem',
+      },
+      width: {
+        sidebar: '18.75rem',
+      },
       colors: {
         black: '#000000',
         darkgrey: '#333333',
         grey: '#545454',
+        lightergrey: '#828282',
         white: '#FFFFFF',
         red: '#E4332F',
         green: '#00CB6D',
@@ -46,5 +60,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('@savvywombat/tailwindcss-grid-areas')],
 };

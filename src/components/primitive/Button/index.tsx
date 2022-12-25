@@ -6,12 +6,16 @@ interface ButtonProps {
   children: ReactNode;
   type?: ButtonType;
   className?: string;
+  onClick?: () => void;
+  isIcon?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
   children,
   className,
   type = 'primary',
+  isIcon,
+  onClick,
 }) => {
   const typeCnMap = {
     primary: 'bg-black text-white hover:bg-darkgrey active:bg-grey',
@@ -26,9 +30,11 @@ const Button: React.FC<ButtonProps> = ({
     <button
       className={cx(
         'inline-flex items-center gap-2 px-6 py-3 font-bold rounded-lg text-body-m transition ease-in-out',
+        isIcon && 'px-3',
         typeCnMap[type],
         className
       )}
+      onClick={onClick}
     >
       {children}
     </button>
