@@ -4,9 +4,7 @@ import { Plus_Jakarta_Sans } from '@next/font/google';
 import styles from '../styles/Home.module.css';
 import Button from '@components/primitive/Button';
 import cx from 'classnames';
-import { FaCalculator } from 'react-icons/fa';
-
-// Plus Jakarta Sans
+import { FaPlus } from 'react-icons/fa';
 
 const plus_jakarta_sans = Plus_Jakarta_Sans({ subsets: ['latin'] });
 
@@ -21,8 +19,8 @@ export default function Home() {
       </Head>
       <main className={cx(styles.main, plus_jakarta_sans.className)}>
         <Button>
-          <FaCalculator />
-          Button
+          Create Event
+          <FaPlus />
         </Button>
       </main>
     </>
