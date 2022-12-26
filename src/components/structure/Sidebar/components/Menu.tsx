@@ -18,7 +18,7 @@ export const Menu: React.FC<MenuProps> = ({
   menuItems = defaultUserItems,
 }) => {
   return (
-    <div className="grid gap-2">
+    <ul className="grid gap-2">
       {menuItems.map((item) => (
         <MenuItem
           key={item.label}
@@ -36,7 +36,7 @@ export const Menu: React.FC<MenuProps> = ({
           </>
         </MenuItem>
       ))}
-    </div>
+    </ul>
   );
 };
 
