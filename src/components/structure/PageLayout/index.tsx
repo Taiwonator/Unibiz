@@ -35,7 +35,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
         className={cx('py-10', sidebarXPaddingCns)}
         classNames={{
           sidebarCollapsed: 'w-20',
-          sidebarUncollapsed: cx('w-[calc(100vw-((3*10)*0.25rem))]', 'md:w-80'),
+          sidebarUncollapsed: cx('w-[calc(100vw-((2*10)*0.25rem))]', 'md:w-80'),
         }}
         collapsed={isCollapsed}
       />
