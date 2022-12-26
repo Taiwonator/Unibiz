@@ -2,12 +2,12 @@ import cx from 'classnames';
 import { ReactNode, useState } from 'react';
 import Banner from '../Banner';
 import Sidebar from '../Sidebar';
-import { Plus_Jakarta_Sans, Inter } from '@next/font/google';
+import { Plus_Jakarta_Sans } from '@next/font/google';
 
 interface PageLayoutProps {
   children?: ReactNode;
 }
-const plus_jakarta_sans = Inter({ subsets: ['latin'] });
+const plus_jakarta_sans = Plus_Jakarta_Sans({ subsets: ['latin'] });
 
 const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
@@ -17,10 +17,16 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   const isCollapsed = isSidebarCollapsed && isSidebarCollapsedFromSidebar;
 
   // TODO: Values are related although formula doesn't make so much sense to me
-  const sidebarXPaddingCns = 'px-10 md:px-4';
+  const sidebarXPaddingCns = 'px-4';
 
   return (
-    <div className={cx(plus_jakarta_sans.className, 'flex min-h-screen')}>
+    <div
+      className={cx(
+        plus_jakarta_sans.className,
+        'flex min-h-screen',
+        'overflow-x-hidden'
+      )}
+    >
       <Sidebar
         actions={{
           triggerCollapse: () => setIsSidebarCollapsedFromSidebar(true),
@@ -28,7 +34,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
         }}
         className={cx('py-10', sidebarXPaddingCns)}
         classNames={{
-          sidebarCollapsed: 'w-30 md:w-20',
+          sidebarCollapsed: 'w-20',
           sidebarUncollapsed: cx('w-[calc(100vw-((3*10)*0.25rem))]', 'md:w-80'),
         }}
         collapsed={isCollapsed}

@@ -25,6 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     <div
       className={cx(
         'text-white bg-black inline-block transition-width ease-in-out delay-50 whitespace-nowrap overflow-hidden shrink-0',
+        'md:delay-50',
         collapsed && classNames?.sidebarCollapsed,
         !collapsed && classNames?.sidebarUncollapsed,
         className
