@@ -21,8 +21,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
     <div
       className={cx(
         plus_jakarta_sans.className,
-        'flex min-h-screen',
-        'overflow-x-hidden'
+        'flex min-h-screen overflow-x-hidden'
       )}
     >
       <Sidebar
@@ -37,10 +36,10 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
         }}
         collapsed={isCollapsed}
       />
-      <div className="flex flex-col flex-grow">
+      <div className="flex flex-col flex-grow relative">
         <div
           className={cx(
-            'absolute w-screen h-screen bg-black -z-10 opacity-0 transition-opacity ease-in-out',
+            'absolute w-full h-full bg-black -z-10 opacity-0 transition-opacity ease-in-out',
             !isCollapsed && 'z-0 !opacity-75'
           )}
           onClick={() => setIsSidebarCollapsed(true)}
