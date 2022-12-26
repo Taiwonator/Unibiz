@@ -33,6 +33,8 @@ const Sidebar: React.FC<SidebarProps> = ({
       )}
       onMouseEnter={actions?.triggerUncollapse}
       onMouseLeave={actions?.triggerCollapse}
+      onFocus={actions?.triggerUncollapse}
+      onBlur={actions?.triggerCollapse}
     >
       <div className={cx('flex flex-col h-full gap-10 z')}>
         <Logo collapsed={collapsed} />
