@@ -4,7 +4,7 @@ interface LogoProps {
   collapsed?: boolean;
 }
 
-const Profile: React.FC<LogoProps> = ({ collapsed }) => {
+export const Profile: React.FC<LogoProps> = ({ collapsed }) => {
   return (
     <div className="font-bold flex items-center gap-2">
       <span className={cx('bg-white text-black rounded-full p-3')}>MT</span>
@@ -12,5 +12,3 @@ const Profile: React.FC<LogoProps> = ({ collapsed }) => {
     </div>
   );
 };
-
-export default Profile;

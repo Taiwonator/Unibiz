@@ -6,7 +6,7 @@ interface LogoProps {
   collapsed?: boolean;
 }
 
-const Logo: React.FC<LogoProps> = ({ collapsed }) => {
+export const Logo: React.FC<LogoProps> = ({ collapsed }) => {
   return (
     <div className={cx('flex items-center gap-2')}>
       <Image
@@ -23,5 +23,3 @@ const Logo: React.FC<LogoProps> = ({ collapsed }) => {
     </div>
   );
 };
-
-export default Logo;

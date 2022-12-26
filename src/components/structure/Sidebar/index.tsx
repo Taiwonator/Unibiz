@@ -1,10 +1,7 @@
 import cx from 'classnames';
-import Logo from './Logo';
-import Menu, { MenuClassNames } from './Menu';
-import Profile from './Profile';
+import { Logo, Menu, MenuClassNames, Profile } from './components';
 
 interface SidebarClassNames extends MenuClassNames {
-  // And will extend Logo/Profile classNames in the future
   sidebarCollapsed?: string;
   sidebarUncollapsed?: string;
 }
