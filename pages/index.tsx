@@ -1,12 +1,7 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import { Plus_Jakarta_Sans } from '@next/font/google';
-import styles from '../styles/Home.module.css';
+import PageLayout from '@components/structure/PageLayout';
 import Button from '@components/primitive/Button';
-import cx from 'classnames';
 import { FaPlus } from 'react-icons/fa';
-
-const plus_jakarta_sans = Plus_Jakarta_Sans({ subsets: ['latin'] });
 
 export default function Home() {
   return (
@@ -17,12 +12,12 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={cx(styles.main, plus_jakarta_sans.className)}>
+      <PageLayout>
         <Button>
           Create Event
           <FaPlus />
         </Button>
-      </main>
+      </PageLayout>
     </>
   );
 }
