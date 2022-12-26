@@ -70,7 +70,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
           'hover:bg-darkgrey hover:text-white hover:font-medium hover:rounded-md',
         !active && 'active:bg-grey',
         active && '!text-black font-bold bg-white rounded-md',
-        !collapsed && cx('md:min-w-sidebar', classNames?.menuItemUncollapsed),
+        !collapsed && cx(classNames?.menuItemUncollapsed),
         collapsed && classNames?.menuItemCollapsed,
         className
       )}

@@ -15,7 +15,11 @@ const Banner: React.FC<BannerProps> = ({ className, sidebar = {} }) => {
   return (
     <div className={className}>
       {' '}
-      <Button type="secondary" isIcon onClick={triggerToggle}>
+      <Button
+        type={isCollapsed ? 'secondary' : 'negative'}
+        isIcon
+        onClick={triggerToggle}
+      >
         {isCollapsed ? <RxHamburgerMenu /> : <RxCross1 />}
       </Button>
     </div>

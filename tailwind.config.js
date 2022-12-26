@@ -20,6 +20,10 @@ module.exports = {
       uw: '2560px',
     },
     extend: {
+      transitionProperty: {
+        width: 'width',
+        opacity: 'opacity',
+      },
       minWidth: {
         sidebar: '18.75rem',
       },
@@ -32,6 +36,7 @@ module.exports = {
         sidebar: '18.75rem',
       },
       width: {
+        30: '7.5rem',
         sidebar: '18.75rem',
       },
       colors: {

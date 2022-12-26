@@ -20,7 +20,7 @@ const Button: React.FC<ButtonProps> = ({
   const typeCnMap = {
     primary: 'bg-black text-white hover:bg-darkgrey active:bg-grey',
     secondary:
-      'border-black border-solid border-4 hover:bg-black hover:text-white active:bg-darkgrey',
+      'border-black border-solid border-4 bg-white hover:bg-black hover:text-white active:bg-darkgrey',
     positive:
       'border-black border-solid border-4 bg-green text-white hover:saturate-150 active:saturate-100',
     negative:

@@ -8,7 +8,7 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ collapsed }) => {
   return (
-    <div className={cx('flex items-center gap-2', collapsed && 'mx-auto')}>
+    <div className={cx('flex items-center gap-2')}>
       <Image
         className={cx('max-w-3')}
         src={ULogo}
