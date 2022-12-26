@@ -1,3 +1,4 @@
+import StarryBackground from '@components/core/StarryBackground';
 import cx from 'classnames';
 import { Logo, Menu, MenuClassNames, Profile } from './components';
 
@@ -24,7 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <div
       className={cx(
-        'text-white bg-black inline-block transition-width ease-in-out delay-50 whitespace-nowrap overflow-hidden shrink-0',
+        'text-white bg-black inline-block transition-width ease-in-out delay-50 whitespace-nowrap overflow-hidden shrink-0 relative',
         'md:delay-50',
         collapsed && classNames?.sidebarCollapsed,
         !collapsed && classNames?.sidebarUncollapsed,
@@ -33,9 +34,9 @@ const Sidebar: React.FC<SidebarProps> = ({
       onMouseEnter={actions?.triggerUncollapse}
       onMouseLeave={actions?.triggerCollapse}
     >
-      <div className={cx('flex flex-col h-full gap-10')}>
+      <div className={cx('flex flex-col h-full gap-10 z')}>
         <Logo collapsed={collapsed} />
-        <div className={cx('md:max-w-sidebar')}>
+        <div className={cx('md:max-w-sidebar z-10')}>
           <Menu
             collapsed={collapsed}
             classNames={{
@@ -49,6 +50,11 @@ const Sidebar: React.FC<SidebarProps> = ({
           <Profile collapsed={collapsed} />
         </div>
       </div>
+      <StarryBackground
+        className={cx('hidden', 'sm:block', 'motion-reduce:hidden')}
+        width={650}
+        height={1000}
+      />
     </div>
   );
 };
