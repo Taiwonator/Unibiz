@@ -29,7 +29,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
         className={cx(
           'inline-flex gap-2 py-4 px-4 items-center text-body-md text-lightergrey select-none w-full',
           !active &&
-            'hover:bg-darkgrey hover:text-white hover:font-medium hover:rounded-md hover:cursor-pointer focus:bg-darkgrey focus:text-white focus:font-medium focus:rounded-md active:bg-grey',
+            'hover:bg-darkgrey/60 hover:text-white hover:font-medium hover:rounded-md hover:cursor-pointer focus:bg-darkgrey focus:text-white focus:font-medium focus:rounded-md active:bg-grey',
           active && '!text-black font-bold bg-white rounded-md',
           !collapsed && cx(classNames?.menuItemUncollapsed),
           collapsed && classNames?.menuItemCollapsed,
