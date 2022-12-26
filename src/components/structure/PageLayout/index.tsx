@@ -15,8 +15,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
     useState(true);
 
   const isCollapsed = isSidebarCollapsed && isSidebarCollapsedFromSidebar;
-
-  // TODO: Values are related although formula doesn't make so much sense to me
   const sidebarXPaddingCns = 'px-4';
 
   return (
