@@ -51,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
       <StarryBackground
-        className={cx('hidden', 'sm:block', 'motion-reduce:hidden')}
+        className={cx('motion-reduce:hidden')}
         width={650}
         height={1000}
       />
