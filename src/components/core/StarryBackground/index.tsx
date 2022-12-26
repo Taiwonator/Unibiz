@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import { useRef, useEffect, useCallback, useState } from 'react';
 import { defaultConfig } from './fixtures';
 import { MathX } from './lib';
@@ -6,6 +7,7 @@ import generateParticle from './lib/particle-generator';
 interface StarryBackgroundProps {
   width?: number;
   height?: number;
+  className?: string;
   config?: {
     layers: {
       speed: number;
@@ -21,6 +23,7 @@ const StarryBackground: React.FC<StarryBackgroundProps> = ({
   config = defaultConfig,
   width,
   height,
+  className,
 }) => {
   const { layers, starsAngle, starBaseRadius } = config;
 
@@ -101,7 +104,7 @@ const StarryBackground: React.FC<StarryBackgroundProps> = ({
     <canvas
       width={width}
       height={height}
-      className="absolute left-0 top-0"
+      className={cx('absolute left-0 top-0', className)}
       ref={canvasRef}
     />
   );

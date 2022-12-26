@@ -50,7 +50,11 @@ const Sidebar: React.FC<SidebarProps> = ({
           <Profile collapsed={collapsed} />
         </div>
       </div>
-      <StarryBackground width={400} height={1000} />
+      <StarryBackground
+        className={cx('hidden', 'sm:block', 'motion-reduce:hidden')}
+        width={650}
+        height={1000}
+      />
     </div>
   );
 };
