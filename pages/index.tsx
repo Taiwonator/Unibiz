@@ -2,8 +2,15 @@ import Head from 'next/head';
 import PageLayout from '@components/structure/PageLayout';
 import Button from '@components/primitive/Button';
 import { FaPlus } from 'react-icons/fa';
+import { useGetAllEventsQuery } from 'generated/graphql';
 
 export default function Home() {
+  const [result] = useGetAllEventsQuery();
+  const { data, fetching, error } = result;
+
+  if (fetching) return <p>Loading...</p>;
+  if (error) return <p>Oh no... {error.message}</p>;
+
   return (
     <>
       <Head>
@@ -17,6 +24,11 @@ export default function Home() {
           Create Event
           <FaPlus />
         </Button>
+        <ul>
+          {data?.event.map((event: any) => (
+            <li key={event.id}>{event.name}</li>
+          ))}
+        </ul>
       </PageLayout>
     </>
   );

@@ -1,6 +1,11 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
+import { withUrqlClient } from 'next-urql';
 
-export default function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   return <Component {...pageProps} />;
-}
+};
+
+export default withUrqlClient(() => ({
+  url: 'http://localhost:4000',
+}))(App);
