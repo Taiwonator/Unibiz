@@ -1,11 +1,20 @@
 import gql from 'graphql-tag';
 
-export const GetAllEventsDocument = gql(`
-  query GetAllEvents {
-    event {
+export const GetAllExperiencesQuery = gql(`
+  query GetAllExperiences {
+    Experience {
       id
       name
-      astroid
+    }
+  }
+`);
+
+export const GetAllUsersQuery = gql(`
+  query GetAllUsers {
+    User {
+      id
+      email
+      firstName
     }
   }
 `);

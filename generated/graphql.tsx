@@ -15,20 +15,26 @@ export type Scalars = {
   Float: number;
 };
 
-export type Account = Node & {
-  __typename?: 'Account';
-  email?: Maybe<Scalars['String']>;
-  /** Unique identifier for the resource */
-  id?: Maybe<Scalars['ID']>;
-  username?: Maybe<Scalars['String']>;
-};
-
-export type Event = Node & {
-  __typename?: 'Event';
+export type Experience = Node & {
+  __typename?: 'Experience';
   astroid?: Maybe<Scalars['String']>;
   /** Unique identifier for the resource */
   id?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createUser?: Maybe<User>;
+};
+
+
+export type MutationCreateUserArgs = {
+  email?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
 };
 
 export type Node = {
@@ -38,44 +44,102 @@ export type Node = {
 
 export type Query = {
   __typename?: 'Query';
-  account?: Maybe<Array<Maybe<Account>>>;
-  accountsById?: Maybe<Array<Maybe<Account>>>;
-  event?: Maybe<Array<Maybe<Event>>>;
+  Experience?: Maybe<Array<Maybe<Experience>>>;
+  Society?: Maybe<Array<Maybe<Society>>>;
+  Union?: Maybe<Array<Maybe<Union>>>;
+  User?: Maybe<Array<Maybe<User>>>;
   hello?: Maybe<Scalars['String']>;
 };
 
-
-export type QueryAccountArgs = {
-  name?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<StatusEnum>;
+export type Society = Node & {
+  __typename?: 'Society';
+  /** Unique identifier for the resource */
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
 };
 
-
-export type QueryAccountsByIdArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+export type Union = Node & {
+  __typename?: 'Union';
+  /** Unique identifier for the resource */
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
 };
 
-export enum StatusEnum {
-  Active = 'ACTIVE',
-  Disabled = 'DISABLED'
-}
+export type User = Node & {
+  __typename?: 'User';
+  email?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  /** Unique identifier for the resource */
+  id?: Maybe<Scalars['ID']>;
+  lastName?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  token?: Maybe<Scalars['String']>;
+};
 
-export type GetAllEventsQueryVariables = Exact<{ [key: string]: never; }>;
+export type CreateUserMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+}>;
 
 
-export type GetAllEventsQuery = { __typename?: 'Query', event?: Array<{ __typename?: 'Event', id?: string | null, name?: string | null, astroid?: string | null } | null> | null };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'User', id?: string | null, email?: string | null, firstName?: string | null, lastName?: string | null, password?: string | null, token?: string | null } | null };
+
+export type GetAllExperiencesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export const GetAllEventsDocument = gql`
-    query GetAllEvents {
-  event {
+export type GetAllExperiencesQuery = { __typename?: 'Query', Experience?: Array<{ __typename?: 'Experience', id?: string | null, name?: string | null } | null> | null };
+
+export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllUsersQuery = { __typename?: 'Query', User?: Array<{ __typename?: 'User', id?: string | null, email?: string | null, firstName?: string | null } | null> | null };
+
+
+export const CreateUserDocument = gql`
+    mutation CreateUser($email: String!, $password: String!, $firstName: String!, $lastName: String!) {
+  createUser(
+    email: $email
+    password: $password
+    firstName: $firstName
+    lastName: $lastName
+  ) {
     id
-    name
-    astroid
+    email
+    firstName
+    lastName
+    password
+    token
   }
 }
     `;
 
-export function useGetAllEventsQuery(options?: Omit<Urql.UseQueryArgs<GetAllEventsQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetAllEventsQuery, GetAllEventsQueryVariables>({ query: GetAllEventsDocument, ...options });
+export function useCreateUserMutation() {
+  return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument);
+};
+export const GetAllExperiencesDocument = gql`
+    query GetAllExperiences {
+  Experience {
+    id
+    name
+  }
+}
+    `;
+
+export function useGetAllExperiencesQuery(options?: Omit<Urql.UseQueryArgs<GetAllExperiencesQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAllExperiencesQuery, GetAllExperiencesQueryVariables>({ query: GetAllExperiencesDocument, ...options });
+};
+export const GetAllUsersDocument = gql`
+    query GetAllUsers {
+  User {
+    id
+    email
+    firstName
+  }
+}
+    `;
+
+export function useGetAllUsersQuery(options?: Omit<Urql.UseQueryArgs<GetAllUsersQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAllUsersQuery, GetAllUsersQueryVariables>({ query: GetAllUsersDocument, ...options });
 };

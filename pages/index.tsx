@@ -2,11 +2,16 @@ import Head from 'next/head';
 import PageLayout from '@components/structure/PageLayout';
 import Button from '@components/primitive/Button';
 import { FaPlus } from 'react-icons/fa';
-import { useGetAllEventsQuery } from 'generated/graphql';
+import { useCreateUserMutation, useGetAllUsersQuery } from 'generated/graphql';
 
 export default function Home() {
-  const [result] = useGetAllEventsQuery();
+  const [result] = useGetAllUsersQuery();
+  const [mutationResult, executeMutation] = useCreateUserMutation();
+  console.log('mutationResult: ', mutationResult);
+  console.log('executeMutation: ', executeMutation);
+
   const { data, fetching, error } = result;
+  const { data: d, fetching: f, error: e } = mutationResult;
 
   if (fetching) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
@@ -20,13 +25,25 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageLayout>
-        <Button>
-          Create Event
+        <Button
+          onClick={() =>
+            executeMutation({
+              email: 'email10000@gmail.com',
+              password: 'password',
+              firstName: 'Michael',
+              lastName: 'Taiwo',
+            })
+          }
+        >
+          Create User
           <FaPlus />
         </Button>
+        <p>
+          Mutation result: <span>{JSON.stringify(d)}</span>
+        </p>
         <ul>
-          {data?.event.map((event: any) => (
-            <li key={event.id}>{event.name}</li>
+          {data?.User?.map((user: any) => (
+            <li key={user.id}>{user.email}</li>
           ))}
         </ul>
       </PageLayout>
