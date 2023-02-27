@@ -1,11 +1,12 @@
+import MainLayout from '@components/layout/MainLayout';
 import Button from '@components/primitive/Button';
-import ScreenButton from '@components/primitive/ScreenButton';
 import Head from 'next/head';
 import Link from 'next/link';
+import { NextPageWithLayout } from 'pages/_app';
+import { ReactElement } from 'react';
 import { FaPlus } from 'react-icons/fa';
 
-export default function Events() {
-  const experiences = [];
+const Events: NextPageWithLayout = () => {
   return (
     <>
       <Head>
@@ -27,4 +28,10 @@ export default function Events() {
       </div>
     </>
   );
-}
+};
+
+Events.getLayout = function getLayout(page: ReactElement) {
+  return <MainLayout>{page}</MainLayout>;
+};
+
+export default Events;

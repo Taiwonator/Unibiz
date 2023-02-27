@@ -1,10 +1,13 @@
 import Head from 'next/head';
 import { useCreateUserMutation, useGetAllUsersQuery } from 'generated/graphql';
 import { isProduction } from '@lib/env-helpers';
+import { ReactElement } from 'react';
+import MainLayout from '@components/layout/MainLayout';
+import { NextPageWithLayout } from './_app';
 
 const isProd = isProduction();
 
-export default function Home() {
+const Home: NextPageWithLayout = () => {
   const [result] = useGetAllUsersQuery();
   const [mutationResult, executeMutation] = useCreateUserMutation();
 
@@ -37,7 +40,10 @@ export default function Home() {
       <div>Hello there</div>
     </>
   );
-}
+};
 
-// Create PageLayout
-// - screen - from types
+Home.getLayout = (page: ReactElement) => {
+  return <MainLayout>{page}</MainLayout>;
+};
+
+export default Home;

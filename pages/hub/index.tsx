@@ -1,6 +1,9 @@
+import MainLayout from '@components/layout/MainLayout';
 import Head from 'next/head';
+import { NextPageWithLayout } from 'pages/_app';
+import { ReactElement } from 'react';
 
-export default function Hub() {
+const Hub: NextPageWithLayout = () => {
   return (
     <>
       <Head>
@@ -9,4 +12,10 @@ export default function Hub() {
       <div>This is the hub</div>
     </>
   );
-}
+};
+
+Hub.getLayout = function getLayout(page: ReactElement) {
+  return <MainLayout>{page}</MainLayout>;
+};
+
+export default Hub;
