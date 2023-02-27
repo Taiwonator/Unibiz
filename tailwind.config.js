@@ -20,6 +20,7 @@ module.exports = {
       uw: '2560px',
     },
     extend: {
+      gridTemplateRows: {},
       transitionProperty: {
         width: 'width',
         opacity: 'opacity',

@@ -25,7 +25,7 @@ export type Experience = Node & {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createUser?: Maybe<User>;
+  createUser?: Maybe<Token>;
 };
 
 
@@ -58,6 +58,11 @@ export type Society = Node & {
   name?: Maybe<Scalars['String']>;
 };
 
+export type Token = {
+  __typename?: 'Token';
+  jwt?: Maybe<Scalars['String']>;
+};
+
 export type Union = Node & {
   __typename?: 'Union';
   /** Unique identifier for the resource */
@@ -84,7 +89,7 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'User', id?: string | null, email?: string | null, firstName?: string | null, lastName?: string | null, password?: string | null, token?: string | null } | null };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'Token', jwt?: string | null } | null };
 
 export type GetAllExperiencesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -105,12 +110,7 @@ export const CreateUserDocument = gql`
     firstName: $firstName
     lastName: $lastName
   ) {
-    id
-    email
-    firstName
-    lastName
-    password
-    token
+    jwt
   }
 }
     `;

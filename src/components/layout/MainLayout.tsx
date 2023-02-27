@@ -1,15 +1,15 @@
 import cx from 'classnames';
 import { ReactNode, useState } from 'react';
-import Banner from '../Banner';
-import Sidebar from '../Sidebar';
+import Banner from './components/Banner';
+import Sidebar from './components/Sidebar';
 import { Plus_Jakarta_Sans } from '@next/font/google';
 
-interface PageLayoutProps {
+interface MainLayoutProps {
   children?: ReactNode;
 }
 const plus_jakarta_sans = Plus_Jakarta_Sans({ subsets: ['latin'] });
 
-const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
+const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isSidebarCollapsedFromSidebar, setIsSidebarCollapsedFromSidebar] =
     useState(true);
@@ -56,4 +56,4 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   );
 };
 
-export default PageLayout;
+export default MainLayout;

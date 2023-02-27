@@ -2,9 +2,8 @@ import Button from '@components/primitive/Button';
 import resolvePageTitle from '@lib/page-title-resolver';
 import cx from 'classnames';
 import { useRouter } from 'next/router';
-import { FaArrowLeft, FaBackspace, FaBackward } from 'react-icons/fa';
+import { FaArrowLeft } from 'react-icons/fa';
 import { RxCross1, RxHamburgerMenu } from 'react-icons/rx';
-import { isConstructorDeclaration } from 'typescript';
 
 interface BannerProps {
   className?: string;

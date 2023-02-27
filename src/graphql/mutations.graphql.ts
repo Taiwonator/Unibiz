@@ -9,12 +9,7 @@ export const CreateUsersQuery = gql(`
         firstName: $firstName,
         lastName: $lastName,
     ) {
-        id
-        email
-        firstName
-        lastName
-        password
-        token
+        jwt
     }
   }
 `);
