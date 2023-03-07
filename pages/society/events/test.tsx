@@ -7,7 +7,7 @@ const EventsTest: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Unibiz | Events Test</title>
+        <title>Unibiz | Society Events Test</title>
       </Head>
       <div className="h-full">I am a test</div>
     </>
@@ -15,7 +15,7 @@ const EventsTest: NextPageWithLayout = () => {
 };
 
 EventsTest.getLayout = function getLayout(page: ReactElement) {
-  return <MainLayout>{page}</MainLayout>;
+  return <MainLayout pageTitle="Events Test">{page}</MainLayout>;
 };
 
 export default EventsTest;

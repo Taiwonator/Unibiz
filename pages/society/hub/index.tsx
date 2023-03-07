@@ -15,7 +15,7 @@ const Hub: NextPageWithLayout = () => {
 };
 
 Hub.getLayout = function getLayout(page: ReactElement) {
-  return <MainLayout>{page}</MainLayout>;
+  return <MainLayout pageTitle="Hub">{page}</MainLayout>;
 };
 
 export default Hub;

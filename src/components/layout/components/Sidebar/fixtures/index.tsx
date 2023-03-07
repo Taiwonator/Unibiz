@@ -20,36 +20,51 @@ export const defaultUserItems: MenuItemType[] = [
     label: 'Home',
     Icon: <FaHome />,
     active: false,
-    link: '/',
+    link: '/society',
   },
   {
     label: 'Events',
     Icon: <FaTag />,
     active: true,
-    link: '/events',
+    link: '/society/events',
   },
   {
     label: 'Hub',
     Icon: <FaHubspot />,
     active: false,
-    link: '/hub',
+    link: '/society/hub',
   },
   {
     label: 'Space',
     Icon: <FaSpaceShuttle />,
     active: false,
-    link: '/space',
+    link: '/society/space',
   },
   {
     label: 'Student Union + Forum',
     Icon: <FaGraduationCap />,
     active: false,
-    link: '/student-union',
+    link: '/society/union',
   },
   {
     label: 'Health Check',
     Icon: <FaHospital />,
     active: false,
-    link: '/health-checl',
+    link: '/society/health',
+  },
+];
+
+export const unionUserItems: MenuItemType[] = [
+  {
+    label: 'Home',
+    Icon: <FaHome />,
+    active: false,
+    link: '/union',
+  },
+  {
+    label: 'Student Union + Forum',
+    Icon: <FaGraduationCap />,
+    active: false,
+    link: '/union/hub',
   },
 ];

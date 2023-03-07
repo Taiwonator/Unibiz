@@ -10,14 +10,14 @@ const Events: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Unibiz | Events</title>
+        <title>Unibiz | Society Events</title>
       </Head>
       <div className="h-full grid grid-cols-1 grid-rows-1">
         <div className="flex items-center justify-center">
           <p>Get Creating :)</p>
         </div>
         <div className="flex justify-end">
-          <Link href="/events/test">
+          <Link href="/society/events/test">
             <Button>
               {' '}
               <FaPlus />
@@ -31,7 +31,7 @@ const Events: NextPageWithLayout = () => {
 };
 
 Events.getLayout = function getLayout(page: ReactElement) {
-  return <MainLayout>{page}</MainLayout>;
+  return <MainLayout pageTitle="Events">{page}</MainLayout>;
 };
 
 export default Events;

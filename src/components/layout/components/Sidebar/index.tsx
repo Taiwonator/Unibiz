@@ -1,6 +1,7 @@
 import StarryBackground from '@components/core/StarryBackground';
 import cx from 'classnames';
 import { Logo, Menu, MenuClassNames, Profile } from './components';
+import { useSession } from 'next-auth/react';
 
 interface SidebarClassNames extends MenuClassNames {
   sidebarCollapsed?: string;
@@ -22,6 +23,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   classNames,
   collapsed,
 }) => {
+  const { data: session } = useSession();
+  const user = session?.user;
   return (
     <div
       className={cx(
@@ -46,10 +49,11 @@ const Sidebar: React.FC<SidebarProps> = ({
               menuItemCollapsed: classNames?.menuItemCollapsed,
               menuItemUncollapsed: classNames?.menuItemUncollapsed,
             }}
+            user={user}
           />
         </div>
         <div className="mt-auto">
-          <Profile collapsed={collapsed} />
+          <Profile name={user?.name as string} collapsed={collapsed} />
         </div>
       </div>
       <StarryBackground

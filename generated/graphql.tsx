@@ -15,6 +15,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type AuthenticatedUserResponse = Token & {
+  __typename?: 'AuthenticatedUserResponse';
+  jwt?: Maybe<Scalars['String']>;
+};
+
 export type Experience = Node & {
   __typename?: 'Experience';
   astroid?: Maybe<Scalars['String']>;
@@ -25,16 +30,22 @@ export type Experience = Node & {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createUser?: Maybe<Token>;
+  createUser?: Maybe<AuthenticatedUserResponse>;
+  loginUser?: Maybe<AuthenticatedUserResponse>;
 };
 
 
 export type MutationCreateUserArgs = {
   email?: InputMaybe<Scalars['String']>;
-  firstName?: InputMaybe<Scalars['String']>;
-  lastName?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
-  token?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationLoginUserArgs = {
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
 };
 
 export type Node = {
@@ -59,7 +70,6 @@ export type Society = Node & {
 };
 
 export type Token = {
-  __typename?: 'Token';
   jwt?: Maybe<Scalars['String']>;
 };
 
@@ -73,51 +83,42 @@ export type Union = Node & {
 export type User = Node & {
   __typename?: 'User';
   email?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
   /** Unique identifier for the resource */
   id?: Maybe<Scalars['ID']>;
-  lastName?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
-  token?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
 };
-
-export type CreateUserMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-}>;
-
-
-export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'Token', jwt?: string | null } | null };
 
 export type GetAllExperiencesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllExperiencesQuery = { __typename?: 'Query', Experience?: Array<{ __typename?: 'Experience', id?: string | null, name?: string | null } | null> | null };
 
+export type LoginUserMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser?: { __typename?: 'AuthenticatedUserResponse', jwt?: string | null } | null };
+
+export type CreateUserMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+  name: Scalars['String'];
+  type?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CreateUserMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'AuthenticatedUserResponse', jwt?: string | null } | null };
+
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', User?: Array<{ __typename?: 'User', id?: string | null, email?: string | null, firstName?: string | null } | null> | null };
+export type GetAllUsersQuery = { __typename?: 'Query', User?: Array<{ __typename?: 'User', id?: string | null, email?: string | null, name?: string | null } | null> | null };
 
 
-export const CreateUserDocument = gql`
-    mutation CreateUser($email: String!, $password: String!, $firstName: String!, $lastName: String!) {
-  createUser(
-    email: $email
-    password: $password
-    firstName: $firstName
-    lastName: $lastName
-  ) {
-    jwt
-  }
-}
-    `;
-
-export function useCreateUserMutation() {
-  return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument);
-};
 export const GetAllExperiencesDocument = gql`
     query GetAllExperiences {
   Experience {
@@ -130,12 +131,34 @@ export const GetAllExperiencesDocument = gql`
 export function useGetAllExperiencesQuery(options?: Omit<Urql.UseQueryArgs<GetAllExperiencesQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllExperiencesQuery, GetAllExperiencesQueryVariables>({ query: GetAllExperiencesDocument, ...options });
 };
+export const LoginUserDocument = gql`
+    mutation LoginUser($email: String!, $password: String!) {
+  loginUser(email: $email, password: $password) {
+    jwt
+  }
+}
+    `;
+
+export function useLoginUserMutation() {
+  return Urql.useMutation<LoginUserMutation, LoginUserMutationVariables>(LoginUserDocument);
+};
+export const CreateUserDocument = gql`
+    mutation CreateUser($email: String!, $password: String!, $name: String!, $type: String) {
+  createUser(email: $email, password: $password, name: $name, type: $type) {
+    jwt
+  }
+}
+    `;
+
+export function useCreateUserMutation() {
+  return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument);
+};
 export const GetAllUsersDocument = gql`
     query GetAllUsers {
   User {
     id
     email
-    firstName
+    name
   }
 }
     `;

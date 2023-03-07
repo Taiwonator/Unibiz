@@ -6,10 +6,11 @@ import { Plus_Jakarta_Sans } from '@next/font/google';
 
 interface MainLayoutProps {
   children?: ReactNode;
+  pageTitle?: string;
 }
 const plus_jakarta_sans = Plus_Jakarta_Sans({ subsets: ['latin'] });
 
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+const MainLayout: React.FC<MainLayoutProps> = ({ children, pageTitle }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isSidebarCollapsedFromSidebar, setIsSidebarCollapsedFromSidebar] =
     useState(true);
@@ -45,6 +46,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         />
         <Banner
           className={cx('pt-10 px-4 z-10')}
+          pageTitle={pageTitle}
           sidebar={{
             isCollapsed: isSidebarCollapsed,
             triggerToggle: () => setIsSidebarCollapsed(!isSidebarCollapsed),

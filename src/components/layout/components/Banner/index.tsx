@@ -1,5 +1,4 @@
 import Button from '@components/primitive/Button';
-import resolvePageTitle from '@lib/page-title-resolver';
 import cx from 'classnames';
 import { useRouter } from 'next/router';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -7,13 +6,18 @@ import { RxCross1, RxHamburgerMenu } from 'react-icons/rx';
 
 interface BannerProps {
   className?: string;
+  pageTitle?: string;
   sidebar?: {
     isCollapsed?: boolean;
     triggerToggle?: () => void;
   };
 }
 
-const Banner: React.FC<BannerProps> = ({ className, sidebar = {} }) => {
+const Banner: React.FC<BannerProps> = ({
+  className,
+  pageTitle,
+  sidebar = {},
+}) => {
   const router = useRouter();
   const pageDepth = router.pathname.split('/').length - 1;
   const { isCollapsed, triggerToggle } = sidebar;
@@ -35,9 +39,7 @@ const Banner: React.FC<BannerProps> = ({ className, sidebar = {} }) => {
             />
           </Button>
         )}
-        <h1 className="text-heading-sm">
-          {resolvePageTitle(router.pathname.slice(1))}
-        </h1>
+        <h1 className="text-heading-sm">{pageTitle}</h1>
       </div>
     </div>
   );
