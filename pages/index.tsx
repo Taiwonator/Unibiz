@@ -1,6 +1,10 @@
 import { NextPageWithLayout } from './_app';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { ReactNode } from 'react';
+import cx from 'classnames';
+import Image from 'next/image';
+import Navigation from '@components/structure/Navigation';
 
 const Home: NextPageWithLayout = () => {
   const { data: session } = useSession();
@@ -20,9 +24,46 @@ const Home: NextPageWithLayout = () => {
   }
   return (
     <>
-      <button onClick={() => signIn()}>Sign in</button>
+      <Navigation />
     </>
   );
 };
 
 export default Home;
+
+interface ContainerProps {
+  children: ReactNode;
+}
+
+const Container: React.FC<ContainerProps> = ({ children }) => {
+  return <div className={cx('max-w-screen-xl mx-auto px-6')}>{children}</div>;
+};
+
+// Components to be made
+// - - - - - - - -- - -- - - - --
+
+// PRIMITIVES
+// Container
+// Stack
+// Modal
+// Alerts
+// Scrollable Area
+// Icons
+// Grey Section
+// Button
+
+// CORE
+// Navigation
+// Form Items
+// DropDownItems (For Nav Dropdwon and Model itelsm)
+// List Item
+// Tabbed Area
+
+// Layouts to be made
+// - - - - - - -- - - - - - - - - -
+
+// Process
+// Society Admin
+// Society Attendee
+// Union Admin
+// Super Admin
