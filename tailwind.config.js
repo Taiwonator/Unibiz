@@ -9,6 +9,9 @@ module.exports = {
   darkMode: false,
   content: [],
   theme: {
+    fontFamily: {
+      sans: ['Plus Jakarta Sans', 'monospace'],
+    },
     screens: {
       xs: '480px',
       sm: '640px',
@@ -20,6 +23,7 @@ module.exports = {
       uw: '2560px',
     },
     extend: {
+      gridTemplateRows: {},
       transitionProperty: {
         width: 'width',
         opacity: 'opacity',
@@ -47,6 +51,13 @@ module.exports = {
         white: '#FFFFFF',
         red: '#E4332F',
         green: '#00CB6D',
+        purple: '#9B51E0',
+        grey0: '#FAFAFA',
+        grey1: '#F1F1F1',
+        grey2: '#EAEAEA',
+        grey3: '#C7C7C7',
+        grey4: '#999999',
+        grey5: '#676767',
       },
       fontSize: {
         'heading-xxs': '1rem',
@@ -65,5 +76,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('daisyui')],
 };

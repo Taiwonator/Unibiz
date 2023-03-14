@@ -1,4 +1,5 @@
 import cx from 'classnames';
+import Link from 'next/link';
 import { ReactNode } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 
@@ -13,6 +14,7 @@ export interface MenuItemProps {
   collapsed?: boolean;
   className?: string;
   classNames?: MenuItemClassNames;
+  link: string;
 }
 
 export const MenuItem: React.FC<MenuItemProps> = ({
@@ -21,11 +23,12 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   className,
   classNames,
   collapsed,
+  link,
 }) => {
   return (
     <li>
-      <a
-        href="#"
+      <Link
+        href={link}
         className={cx(
           'inline-flex gap-2 py-4 px-4 items-center text-body-md text-lightergrey select-none w-full',
           !active &&
@@ -38,7 +41,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
       >
         {children}
         {!collapsed && active && <FaArrowRight className="ml-auto" />}
-      </a>
+      </Link>
     </li>
   );
 };

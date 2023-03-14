@@ -1,21 +1,21 @@
 import cx from 'classnames';
 import { ReactNode, useState } from 'react';
-import Banner from '../Banner';
-import Sidebar from '../Sidebar';
+import Banner from './components/Banner';
+import Sidebar from './components/Sidebar';
 import { Plus_Jakarta_Sans } from '@next/font/google';
 
-interface PageLayoutProps {
+interface MainLayoutProps {
   children?: ReactNode;
+  pageTitle?: string;
 }
 const plus_jakarta_sans = Plus_Jakarta_Sans({ subsets: ['latin'] });
 
-const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
+const MainLayout: React.FC<MainLayoutProps> = ({ children, pageTitle }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isSidebarCollapsedFromSidebar, setIsSidebarCollapsedFromSidebar] =
     useState(true);
 
   const isCollapsed = isSidebarCollapsed && isSidebarCollapsedFromSidebar;
-  const sidebarXPaddingCns = 'px-4';
 
   return (
     <div
@@ -29,7 +29,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
           triggerCollapse: () => setIsSidebarCollapsedFromSidebar(true),
           triggerUncollapse: () => setIsSidebarCollapsedFromSidebar(false),
         }}
-        className={cx('py-10', sidebarXPaddingCns)}
+        className={cx('py-10 px-4')}
         classNames={{
           sidebarCollapsed: 'w-20',
           sidebarUncollapsed: cx('w-[calc(100vw-((2*10)*0.25rem))]', 'md:w-80'),
@@ -45,18 +45,17 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
           onClick={() => setIsSidebarCollapsed(true)}
         />
         <Banner
-          className={cx('py-10 z-10', sidebarXPaddingCns)}
+          className={cx('pt-10 px-4 z-10')}
+          pageTitle={pageTitle}
           sidebar={{
             isCollapsed: isSidebarCollapsed,
             triggerToggle: () => setIsSidebarCollapsed(!isSidebarCollapsed),
           }}
         />
-        <main className={cx('flex-grow min-w-[1000px]', sidebarXPaddingCns)}>
-          {children}
-        </main>
+        <main className={cx('flex-grow py-4 px-4')}>{children}</main>
       </div>
     </div>
   );
 };
 
-export default PageLayout;
+export default MainLayout;
