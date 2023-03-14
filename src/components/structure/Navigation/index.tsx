@@ -1,6 +1,8 @@
 import cx from 'classnames';
+import { useState, useContext } from 'react';
 import { FaArrowDown } from 'react-icons/fa';
 import { ListItem, Logo } from './components';
+import useNavigation from '../../../hooks/useNavigation';
 
 interface NavigationProps {
   type?: string;
@@ -30,7 +32,7 @@ const Navigation: React.FC<NavigationProps> = ({ type }) => {
 
       <nav
         className={cx(
-          'flex gap-8 pb-2 pr-4 overflow-x-auto scrollbar-hide whitespace-nowrap md:container-lg'
+          'flex gap-8 pb-2 pr-4 overflow-x-auto scrollbar-hide whitespace-nowrap md:max-w-screen-xl md:mx-auto'
         )}
       >
         <div className={cx('flex translate-x-2')}>
@@ -42,16 +44,51 @@ const Navigation: React.FC<NavigationProps> = ({ type }) => {
 };
 
 const SocietyAdminListItems: React.FC = ({}) => {
+  const { activeNavItem, setActiveNavItem } = useNavigation();
+
   return (
     <>
-      <ListItem href="#">Events</ListItem>
-      <ListItem href="#">Hub</ListItem>
-      <ListItem active href="#">
+      <ListItem
+        activeItem={activeNavItem}
+        href="/"
+        id="events"
+        onClick={() => setActiveNavItem('events')}
+      >
+        Events
+      </ListItem>
+      <ListItem
+        activeItem={activeNavItem}
+        href="/test"
+        id="hub"
+        onClick={() => setActiveNavItem('hub')}
+      >
+        Hub
+      </ListItem>
+      <ListItem
+        activeItem={activeNavItem}
+        href="#"
+        id="student-union"
+        onClick={() => setActiveNavItem('student-union')}
+      >
         Student Union
       </ListItem>
-      <ListItem href="#">Photo Dump</ListItem>
-      <ListItem href="#">Health Check</ListItem>
-      <ListItem disabled href="#">
+      <ListItem
+        activeItem={activeNavItem}
+        href="#"
+        id="photo-dump"
+        onClick={() => setActiveNavItem('photo-dump')}
+      >
+        Photo Dump
+      </ListItem>
+      <ListItem
+        activeItem={activeNavItem}
+        href="#"
+        id="health-check"
+        onClick={() => setActiveNavItem('health-check')}
+      >
+        Health Check
+      </ListItem>
+      <ListItem activeItem={activeNavItem} disabled href="#" id="superlist">
         Superlist
       </ListItem>
     </>

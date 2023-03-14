@@ -5,40 +5,44 @@ import { ReactNode } from 'react';
 import cx from 'classnames';
 import Image from 'next/image';
 import Navigation from '@components/structure/Navigation';
+import SocietyAdminLayout from '@components/layout/SocietyAdminLayout';
 
 const Home: NextPageWithLayout = () => {
-  const { data: session } = useSession();
-  const router = useRouter();
-  if (session?.user) {
-    switch (session?.user.type) {
-      case 'society_organiser':
-        router.push('/society');
-        break;
-      case 'union_rep':
-        router.push('/union');
-        break;
-      default:
-        router.push('/society');
-        break;
-    }
-  }
+  // const { data: session } = useSession();
+  // const router = useRouter();
+  // if (session?.user) {
+  //   switch (session?.user.type) {
+  //     case 'society_organiser':
+  //       router.push('/society');
+  //       break;
+  //     case 'union_rep':
+  //       router.push('/union');
+  //       break;
+  //     default:
+  //       router.push('/society');
+  //       break;
+  //   }
+  // }
   return (
     <>
-      <Navigation />
+      <div className="container-lg">Hello there</div>
     </>
   );
 };
 
+Home.getLayout = (page: ReactNode) => (
+  <SocietyAdminLayout>{page}</SocietyAdminLayout>
+);
+
 export default Home;
 
-interface ContainerProps {
-  children: ReactNode;
-}
+// interface ContainerProps {
+//   children: ReactNode;
+// }
 
-const Container: React.FC<ContainerProps> = ({ children }) => {
-  return <div className={cx('max-w-screen-xl mx-auto px-6')}>{children}</div>;
-};
-
+// const Container: React.FC<ContainerProps> = ({ children }) => {
+//   return <div className={cx('max-w-screen-xl mx-auto px-6')}>{children}</div>;
+// };
 // Components to be made
 // - - - - - - - -- - -- - - - --
 

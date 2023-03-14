@@ -7,7 +7,7 @@
 
 @layer utilities {
   .container-lg {
-    @apply max-w-screen-xl mx-auto;
+    @apply max-w-screen-xl mx-auto px-6;
   }
 
   /* For Webkit-based browsers (Chrome, Safari and Opera) */

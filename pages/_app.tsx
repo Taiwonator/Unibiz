@@ -5,6 +5,7 @@ import type { AppProps } from 'next/app';
 import { withUrqlClient } from 'next-urql';
 import { SessionProvider } from 'next-auth/react';
 import MainLayout from '@components/layout/MainLayout';
+import { NavigationProvider } from 'src/context/NavigationContext';
 
 export type NextPageWithLayout<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -19,7 +20,9 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
   return (
     <SessionProvider session={pageProps.session}>
-      {getLayout(<Component {...pageProps} />)}
+      <NavigationProvider>
+        {getLayout(<Component {...pageProps} />)}
+      </NavigationProvider>
     </SessionProvider>
   );
 };

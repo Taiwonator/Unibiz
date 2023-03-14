@@ -18,11 +18,18 @@
       "@components/*": ["src/components/*"],
       "@utils/*": ["src/utils/*"],
       "@lib/*": ["src/lib/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@context/*": ["src/context/*"],
       "@services/*": ["src/services/*"],
       "@public/*": ["public/*"]
     },
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/hooks/useNavigation.js"
+  ],
   "exclude": ["node_modules"]
 }
