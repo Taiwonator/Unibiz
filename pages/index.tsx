@@ -1,11 +1,10 @@
 import { NextPageWithLayout } from './_app';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
-import cx from 'classnames';
-import Image from 'next/image';
-import Navigation from '@components/structure/Navigation';
-import SocietyAdminLayout from '@components/layout/SocietyAdminLayout';
+import { FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
+import TabbedArea, { tabsFixture } from '@components/core/TabbedArea';
+import Control, { TextInput } from '@components/core/Form/Control';
+import { Search, UniSelect } from '@components/core/Form';
 
 const Home: NextPageWithLayout = () => {
   // const { data: session } = useSession();
@@ -23,45 +22,34 @@ const Home: NextPageWithLayout = () => {
   //       break;
   //   }
   // }
+
   return (
-    <>
-      <div className="container-lg">Hello there</div>
-    </>
+    <div className="space-y-4 container-lg py-4">
+      <div>loading...</div>
+    </div>
   );
 };
 
-Home.getLayout = (page: ReactNode) => (
-  <SocietyAdminLayout>{page}</SocietyAdminLayout>
-);
-
 export default Home;
 
-// interface ContainerProps {
-//   children: ReactNode;
-// }
-
-// const Container: React.FC<ContainerProps> = ({ children }) => {
-//   return <div className={cx('max-w-screen-xl mx-auto px-6')}>{children}</div>;
-// };
-// Components to be made
 // - - - - - - - -- - -- - - - --
 
 // PRIMITIVES
-// Container
-// Stack
-// Modal
-// Alerts
-// Scrollable Area
-// Icons
-// Grey Section
-// Button
+// Container ✅
+// Stack ✅
+// Modal ✅
+// Alerts ✅
+// Scrollable Area ✅
+// Icons ✅
+// Grey Section ✅
+// Button ✅
 
 // CORE
-// Navigation
+// Navigation ✅
 // Form Items
-// DropDownItems (For Nav Dropdwon and Model itelsm)
-// List Item
-// Tabbed Area
+// DropDownItems (For Nav Dropdwon and Model itelsm) ✅
+// List Item ✅
+// Tabbed Area ✅
 
 // Layouts to be made
 // - - - - - - -- - - - - - - - - -

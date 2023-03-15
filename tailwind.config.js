@@ -13,6 +13,7 @@ module.exports = {
       sans: ['Plus Jakarta Sans', 'monospace'],
     },
     screens: {
+      xxs: '360px',
       xs: '480px',
       sm: '640px',
       md: '768px',
@@ -58,6 +59,13 @@ module.exports = {
         grey3: '#C7C7C7',
         grey4: '#999999',
         grey5: '#676767',
+        positivelight: '#69FFBA',
+        positive: '#00CB6D',
+        positivedark: '#219653',
+        warning: '#FFF7DF',
+        warningdark: '#CC9A00',
+        error: '#FFE4E4',
+        errordark: '#BD2929',
       },
       fontSize: {
         'heading-xxs': '1rem',

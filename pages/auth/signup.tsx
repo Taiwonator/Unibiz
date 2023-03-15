@@ -1,8 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import Input from '@components/core/Form/Input';
-import Button from '@components/primitive/Button';
 import { FaArrowRight } from 'react-icons/fa';
 import { useCreateUserMutation } from 'generated/graphql';
 import { useRouter } from 'next/router';
@@ -34,7 +32,7 @@ const Signup = () => {
 
   return (
     <div className="flex h-screen justify-center">
-      <div className="my-auto">
+      {/* <div className="my-auto">
         <form
           className="flex flex-col gap-4"
           onSubmit={handleSubmit(handleSignup)}
@@ -52,7 +50,8 @@ const Signup = () => {
             <FaArrowRight />
           </Button>
         </form>
-      </div>
+      </div> */}
+      Signup
     </div>
   );
 };
