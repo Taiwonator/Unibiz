@@ -16,11 +16,12 @@ import {
 } from 'react-icons/fa';
 import { RxCrossCircled } from 'react-icons/rx';
 
+export type AlertType = 'info' | 'success' | 'warning' | 'error';
 interface AlertProps {
   children?: ReactNode;
   onClose: () => void;
   open: boolean;
-  type: 'info' | 'success' | 'warning' | 'error';
+  type: AlertType;
 }
 
 const Alert: React.FC<AlertProps> = ({
@@ -56,7 +57,7 @@ const Alert: React.FC<AlertProps> = ({
     <div
       ref={alertRef}
       className={cx(
-        'alert shadow-lg transition-all',
+        'alert hidden shadow-lg transition-all',
         // !open && 'hidden',
         typeClassName[type]
       )}

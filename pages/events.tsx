@@ -2,6 +2,8 @@ import { NextPageWithLayout } from './_app';
 import SocietyAdminLayout from '@components/layout/SocietyAdminLayout';
 import useNavigation from 'src/hooks/useNavigation';
 import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import retreiveFirstName from '@lib/first-name-retreiver';
 
 const Events: NextPageWithLayout = () => {
   const { setActiveNavItem } = useNavigation();

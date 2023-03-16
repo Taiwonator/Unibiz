@@ -9,30 +9,92 @@ import MinimialLayout from '@components/layout/MinimalLayout';
 import { FaArrowRight, FaGoogle } from 'react-icons/fa';
 import Link from '@components/primitive/Link';
 import { TextInput } from '@components/core/Form';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { useState } from 'react';
+import Router, { useRouter } from 'next/router';
+import useAlert from 'src/hooks/useAlert';
 
 export default function SignIn({
   providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+
   const credentialsProvider = Object.values(providers).find(
     (p) => p.id === 'credentials'
   );
-  console.log('provider: ', credentialsProvider);
+
+  const schema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup.string().required(),
+  });
+
+  const { dispatchAlert } = useAlert();
+  const { register, getValues, handleSubmit } = useForm();
+
+  const handleSignIn = async () => {
+    if (!showPassword) {
+      try {
+        await yup
+          .string()
+          .email()
+          .required()
+          .validate(getValues('email'), { abortEarly: false });
+        setShowPassword(true);
+        // Input values are valid
+      } catch (error) {
+        // Input values are invalid
+        console.error(error.errors);
+      }
+    } else {
+      try {
+        await schema.validate(
+          {
+            email: getValues('email'),
+            password: getValues('password'),
+          },
+          { abortEarly: false }
+        );
+        const process = await signIn(credentialsProvider?.id, {
+          email: getValues('email'),
+          password: getValues('password'),
+          redirect: false,
+        });
+        console.log('process: ', process);
+        const { ok, error } = process;
+        if (ok) {
+          router.push('/events');
+        } else {
+          dispatchAlert({
+            text: error,
+            type: 'error',
+          });
+        }
+      } catch (error) {
+        console.error(error.errors);
+      }
+    }
+  };
+
   return (
     <MinimialLayout>
       <div className="container-sm flex flex-col items-center justify-center h-[80vh] space-y-6">
         <div className="flex flex-col items-center">
-          <Link href="/api/auth/signup" className="text-sm">
+          <Link href="/auth/signup" className="text-sm">
             Sign up
+            <FaArrowRight className="text-positive" />
           </Link>
           <h2 className="font-extrabold text-2xl">Log in to Unibiz</h2>
         </div>
         <form className="space-y-2">
-          <TextInput type="text" />
+          <TextInput type="text" {...register('email')} />
+          {showPassword && <TextInput type="text" {...register('password')} />}
           <button
-            onClick={() => signIn(credentialsProvider?.id)}
             className="btn bg-black w-full"
+            onClick={handleSubmit(handleSignIn)}
           >
-            Contiue with Email
+            {showPassword ? 'Login to admin portal' : 'Continue with Email'}
           </button>
         </form>
         <div className="divider before:bg-black after:bg-black" />

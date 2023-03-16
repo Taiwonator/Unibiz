@@ -1,20 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async redirects() {
-    // const signinSources = ['/signin', '/auth/signin'];
-    // return [
-    //   {
-    //     source: '/signup',
-    //     destination: '/auth/signup',
-    //     permanent: true,
-    //   },
-    //   ...signinSources.map((s) => ({
-    //     source: s,
-    //     destination: '/api/auth/signin',
-    //     permanent: true,
-    //   })),
-    // ];
-    return [];
+    return [
+      {
+        source: '/signup',
+        destination: '/auth/signup',
+        permanent: true,
+      },
+      {
+        source: '/signout',
+        destination: '/api/auth/signout',
+        permanent: true,
+      },
+      {
+        source: '/signin',
+        destination: '/api/auth/signin',
+        permanent: true,
+      },
+    ];
   },
   reactStrictMode: true,
   images: { domains: ['via.placeholder.com', 'logo.clearbit.com'] },

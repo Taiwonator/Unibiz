@@ -1,11 +1,14 @@
 import '../styles/globals.css';
-import type { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode, useContext } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { withUrqlClient } from 'next-urql';
 import { SessionProvider } from 'next-auth/react';
 import MainLayout from '@components/layout/MainLayout';
 import { NavigationProvider } from 'src/context/NavigationContext';
+import Alert from '@components/primitive/Alert';
+import useAlert from 'src/hooks/useAlert';
+import { AlertProvider } from 'src/context/AlertContext';
 
 export type NextPageWithLayout<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -21,7 +24,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   return (
     <SessionProvider session={pageProps.session}>
       <NavigationProvider>
-        {getLayout(<Component {...pageProps} />)}
+        <AlertProvider>{getLayout(<Component {...pageProps} />)}</AlertProvider>
       </NavigationProvider>
     </SessionProvider>
   );

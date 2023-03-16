@@ -16,7 +16,6 @@ const Link: React.FC<LinkProps> = ({ children, className, href }) => {
       href={href}
     >
       {children}
-      <FaArrowRight className="text-positive" />
     </NextLink>
   );
 };

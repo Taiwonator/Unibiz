@@ -1,59 +1,121 @@
-import { useForm } from 'react-hook-form';
+import MinimialLayout from '@components/layout/MinimalLayout';
+import { FaArrowLeft } from 'react-icons/fa';
+import Link from '@components/primitive/Link';
+import { Control, TextInput } from '@components/core/Form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { FaArrowRight } from 'react-icons/fa';
 import { useCreateUserMutation } from 'generated/graphql';
 import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react';
 
-const Signup = () => {
+export default function SignIn() {
   const schema = yup.object().shape({
     name: yup.string().required(),
-    email: yup.string().required(),
-    type: yup.string().required(),
+    email: yup.string().email().required(),
+    userType: yup.string().required(),
     password: yup.string().required(),
-    passwordRepeat: yup.string().required(),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref('password')], 'Passwords must match.')
+      .required('Please confirm your password.'),
   });
 
+  const router = useRouter();
   const [_, executeMutation] = useCreateUserMutation();
   const { register, getValues, handleSubmit } = useForm({
     resolver: yupResolver(schema),
   });
-  const router = useRouter();
 
-  const handleSignup = async (e: any) => {
-    executeMutation({
+  const handleSignUp = async () => {
+    await executeMutation({
       name: getValues('name'),
       email: getValues('email'),
-      type: getValues('type'),
+      type: getValues('userType'),
       password: getValues('password'),
     });
-    router.push('/api/auth/signin');
+    alert('account created');
+    try {
+      await signIn('credentials', {
+        email: getValues('email'),
+        password: getValues('password'),
+        redirect: false,
+      });
+      router.push('/events');
+    } catch (error) {
+      console.error(error.errors);
+    }
   };
 
   return (
-    <div className="flex h-screen justify-center">
-      {/* <div className="my-auto">
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={handleSubmit(handleSignup)}
-        >
-          <Input placeholder="name" {...register('name')} />
-          <Input placeholder="email" {...register('email')} />
-          <Input placeholder="type" {...register('type')} />
-          <Input placeholder="password" {...register('password')} />
-          <Input
-            placeholder="repeat password"
-            {...register('passwordRepeat')}
+    <MinimialLayout>
+      <div className="container-sm flex flex-col items-center justify-center py-8 min-h-[90vh] space-y-6">
+        <div className="flex flex-col items-center">
+          <h2 className="font-extrabold text-2xl">Sign up to Unibiz</h2>
+        </div>
+        <form className="space-y-4 w-full">
+          <Control
+            placeholder="James Doe"
+            label="Full Name"
+            labels={{ bottomLeft: 'Name must be maximum 40 characters' }}
+            type="text"
+            {...register('name')}
           />
-          <Button>
-            Sign Up
-            <FaArrowRight />
-          </Button>
-        </form>
-      </div> */}
-      Signup
-    </div>
-  );
-};
 
-export default Signup;
+          <Control
+            placeholder="james.doe@gmai.com"
+            label="Email"
+            type="text"
+            {...register('email')}
+          />
+
+          <Control
+            placeholder="pick a user type"
+            classNames={{
+              input: 'select-bordered',
+            }}
+            label="User Type"
+            type="select"
+            options={[
+              {
+                label: 'Society Admin',
+                value: 'society_admin',
+              },
+              {
+                label: 'Union Admin',
+                value: 'union_admin',
+              },
+            ]}
+            {...register('userType')}
+          />
+
+          <Control
+            placeholder="**********"
+            label="Password"
+            type="password"
+            labels={{ bottomLeft: 'Password must follow undecided rule ;)' }}
+            {...register('password')}
+          />
+
+          <Control
+            placeholder="**********"
+            label="Repeat Password"
+            type="password"
+            {...register('confirmPassword')}
+          />
+
+          <button
+            className="btn bg-black w-full mt-8"
+            onClick={handleSubmit(handleSignUp)}
+          >
+            Create Account
+          </button>
+        </form>
+        <div className="divider before:bg-black after:bg-black" />
+        <Link href="/api/auth/signin" className="text-sm">
+          <FaArrowLeft className="text-positive" />I already have an account
+        </Link>
+      </div>
+    </MinimialLayout>
+  );
+}

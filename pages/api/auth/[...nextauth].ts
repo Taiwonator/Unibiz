@@ -20,14 +20,7 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'Custom',
       type: 'credentials',
-      credentials: {
-        email: {
-          label: 'Email',
-          type: 'text',
-          placeholder: 'john.snow@gmail.com',
-        },
-        password: { label: 'Password', type: 'password' },
-      },
+      credentials: {},
       async authorize(_, req) {
         const client = initUrqlClient({ url: 'http://localhost:4000' }, false);
         const result = await client

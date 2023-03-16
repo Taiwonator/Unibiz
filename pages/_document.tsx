@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from 'next/document';
+import { AlertProvider } from 'src/context/AlertContext';
 
 export default function Document() {
   return (
