@@ -34,7 +34,6 @@ export default function SignIn() {
       type: getValues('userType'),
       password: getValues('password'),
     });
-    alert('account created');
     try {
       await signIn('credentials', {
         email: getValues('email'),

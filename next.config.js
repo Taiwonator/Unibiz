@@ -20,7 +20,13 @@ const nextConfig = {
     ];
   },
   reactStrictMode: true,
-  images: { domains: ['via.placeholder.com', 'logo.clearbit.com'] },
+  images: {
+    domains: [
+      'via.placeholder.com',
+      'logo.clearbit.com',
+      'lh3.googleusercontent.com',
+    ],
+  },
 };
 
 module.exports = nextConfig;

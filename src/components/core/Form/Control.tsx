@@ -104,28 +104,29 @@ export interface SelectInputProps {
   placeholder?: string;
 }
 
-export const SelectInput = forwardRef<HTMLInputElement, ControlProps>(
-  (props, ref) => {
-    const { className, disabled, options, placeholder } = props;
-    return (
-      <select
-        {...props}
-        ref={ref}
-        className={cx('select w-full', className)}
-        disabled={disabled}
-      >
-        <option disabled selected>
-          {placeholder}
+export const SelectInput = forwardRef<
+  HTMLInputElement,
+  Omit<ControlProps, 'type'>
+>((props, ref) => {
+  const { className, disabled, options, placeholder } = props;
+  return (
+    <select
+      {...props}
+      ref={ref}
+      className={cx('select select-bordered w-full', className)}
+      disabled={disabled}
+    >
+      <option disabled selected>
+        {placeholder}
+      </option>
+      {options?.map((option, i) => (
+        <option key={i} value={option.value}>
+          {option.label}
         </option>
-        {options?.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    );
-  }
-);
+      ))}
+    </select>
+  );
+});
 
 SelectInput.displayName = 'SelectInput';
 

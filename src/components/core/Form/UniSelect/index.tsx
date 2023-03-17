@@ -1,54 +1,62 @@
 import { useState } from '@storybook/addons';
 import cx from 'classnames';
 import Image from 'next/image';
+import { useForm } from 'react-hook-form';
 import { SelectInput, SelectInputProps } from '../Control';
 import { fixtures } from './fixtures';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { forwardRef, useEffect } from 'react';
+import { FaSearch } from 'react-icons/fa';
 
 interface UniSelectProps extends SelectInputProps {
   className?: string;
   classNames?: {
     input?: string;
   };
+  uniDomain?: string;
 }
 
-const transformFixtures = (fixture: any) => {
-  return fixtures.map((uni) => ({
-    value: uni.name!,
-    label: uni.name!,
+const transformFixtures = (fixtures: any) => {
+  return fixtures.map((uni: any) => ({
+    value: uni.name,
+    label: uni.name,
   }));
 };
 
-export const UniSelect: React.FC<UniSelectProps> = (props) => {
-  //   const [selectedUni, setSelectedUni] = useState({});
+export const UniSelect = forwardRef<HTMLInputElement, UniSelectProps>(
+  (props, ref) => {
+    const { className, classNames, options, uniDomain } = props;
+    const uniLogo = `https://logo.clearbit.com/${uniDomain}`;
 
-  const {
-    className,
-    classNames,
-    options = transformFixtures(fixtures),
-  } = props;
-
-  const uniLogo = `https://logo.clearbit.com/${fixtures[1].domains[0]}`;
-
-  return (
-    <div className={cx('flex items-center gap-2', className)}>
-      <div className="absolute ml-4">
-        <div className="relative max-w-[20px] rounded-full overflow-hidden">
-          <Image
-            src={uniLogo}
-            width={100}
-            height={100}
-            style={{
-              objectFit: 'cover',
-            }}
-            alt="placeholder"
-          />
+    return (
+      <div className={cx('flex items-center gap-2', className)}>
+        <div className="absolute ml-4">
+          <div className="relative max-w-[20px] rounded-full overflow-hidden">
+            {uniDomain ? (
+              <Image
+                src={uniLogo}
+                width={100}
+                height={100}
+                style={{
+                  objectFit: 'cover',
+                }}
+                alt="placeholder"
+              />
+            ) : (
+              <FaSearch />
+            )}
+          </div>
         </div>
+        <SelectInput
+          {...props}
+          className={cx('!bg-white pl-12', classNames?.input)}
+          options={transformFixtures(options)}
+          ref={ref}
+        />
       </div>
-      <SelectInput
-        className={cx('!bg-white pl-12', classNames?.input)}
-        options={options}
-        {...props}
-      />
-    </div>
-  );
-};
+    );
+  }
+);
+
+UniSelect.displayName = 'UniSelect';

@@ -6,14 +6,7 @@ import {
   useState,
 } from 'react';
 import cx from 'classnames';
-import {
-  FaAmbulance,
-  FaBolt,
-  FaBoxOpen,
-  FaCross,
-  FaCrosshairs,
-  FaInfo,
-} from 'react-icons/fa';
+import { FaAmbulance, FaBolt, FaInfo } from 'react-icons/fa';
 import { RxCrossCircled } from 'react-icons/rx';
 
 export type AlertType = 'info' | 'success' | 'warning' | 'error';
@@ -58,7 +51,6 @@ const Alert: React.FC<AlertProps> = ({
       ref={alertRef}
       className={cx(
         'alert hidden shadow-lg transition-all',
-        // !open && 'hidden',
         typeClassName[type]
       )}
     >
@@ -67,7 +59,7 @@ const Alert: React.FC<AlertProps> = ({
         {type === 'success' && <FaBolt />}
         {type === 'warning' && <FaInfo />}
         {type === 'error' && <FaAmbulance />}
-        <div>{children}</div>
+        <div className="text-xs">{children}</div>
         <RxCrossCircled className="ml-auto" onClick={onClose} />
       </div>
     </div>

@@ -30,7 +30,7 @@ export default function SignIn({
     password: yup.string().required(),
   });
 
-  const { dispatchAlert } = useAlert();
+  const { closeAlert, dispatchAlert } = useAlert();
   const { register, getValues, handleSubmit } = useForm();
 
   const handleSignIn = async () => {
@@ -64,10 +64,11 @@ export default function SignIn({
         console.log('process: ', process);
         const { ok, error } = process;
         if (ok) {
+          closeAlert();
           router.push('/events');
         } else {
           dispatchAlert({
-            text: error,
+            text: 'Incorect email or password',
             type: 'error',
           });
         }
