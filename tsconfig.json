@@ -29,7 +29,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/hooks/useNavigation.js"
+    "src/hooks/useNavigation.ts"
   ],
   "exclude": ["node_modules"]
 }

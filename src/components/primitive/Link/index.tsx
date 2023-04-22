@@ -12,7 +12,11 @@ interface LinkProps {
 const Link: React.FC<LinkProps> = ({ children, className, href }) => {
   return (
     <NextLink
-      className={cx('inline-flex items-center gap-2 font-bold', className)}
+      className={cx(
+        'inline-flex items-center gap-2 font-bold transition-all',
+        'hover:text-positive',
+        className
+      )}
       href={href}
     >
       {children}

@@ -1,4 +1,4 @@
-import StarryBackground from '@components/core/StarryBackground';
+// import StarryBackground from '@components/core/StarryBackground';
 import cx from 'classnames';
 import { Logo, Menu, MenuClassNames, Profile } from './components';
 import { useSession } from 'next-auth/react';
@@ -56,11 +56,11 @@ const Sidebar: React.FC<SidebarProps> = ({
           <Profile name={user?.name as string} collapsed={collapsed} />
         </div>
       </div>
-      <StarryBackground
+      {/* <StarryBackground
         className={cx('motion-reduce:hidden')}
         width={650}
         height={1000}
-      />
+      /> */}
     </div>
   );
 };

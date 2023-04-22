@@ -62,7 +62,7 @@ const Home: NextPageWithLayout = () => {
           label="Repeat your Password"
           type="password"
         />
-        <Search type="text" />
+        <Search />
         <Control
           placeholder="placeholder text"
           label="Repeat your Password"
@@ -76,30 +76,8 @@ const Home: NextPageWithLayout = () => {
 
 export default Home;
 
-// - - - - - - - -- - -- - - - --
-
-// PRIMITIVES
-// Container ✅
-// Stack ✅
-// Modal ✅
-// Alerts ✅
-// Scrollable Area ✅
-// Icons ✅
-// Grey Section ✅
-// Button ✅
-
-// CORE
-// Navigation ✅
-// Form Items
-// DropDownItems (For Nav Dropdwon and Model itelsm) ✅
-// List Item ✅
-// Tabbed Area ✅
-
-// Layouts to be made
-// - - - - - - -- - - - - - - - - -
-
-// Process
-// Society Admin
-// Society Attendee
-// Union Admin
-// Super Admin
+// Objects
+// -- User
+// -- // -- Event
+// -- // -- Union
+// -- // -- Society

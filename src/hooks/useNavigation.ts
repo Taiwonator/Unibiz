@@ -4,7 +4,7 @@ import { NavigationContext } from 'src/context/NavigationContext';
 const useNavigation = () => {
   const [state, setState] = useContext(NavigationContext);
 
-  const setActiveNavItem = (id) => {
+  const setActiveNavItem = (id: string) => {
     setState((state) => ({ ...state, activeNavItem: id }));
   };
 

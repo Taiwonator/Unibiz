@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-export const LoginUser = gql(`
-  mutation LoginUser($email: String!, $password: String!) {
-    loginUser
+export const LoginCredentialsUser = gql(`
+  mutation LoginCredentialsUser($email: String!, $password: String!) {
+    loginCredentialsUser
     (
         email: $email,
         password: $password,
@@ -22,6 +22,15 @@ export const CreateUsersQuery = gql(`
         type: $type,
     ) {
         jwt
+    }
+  }
+`);
+
+export const UpdateUserCurrentGroupQuery = gql(`
+  mutation SetUserCurrentGroup($userId: String, $groupId: String) {
+    setUserCurrentGroup(userId: $userId, groupId: $groupId) {
+      id
+      currentGroup
     }
   }
 `);

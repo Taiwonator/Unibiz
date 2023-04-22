@@ -1,8 +1,9 @@
 import cx from 'classnames';
-import { forwardRef } from 'react';
+import { forwardRef, LegacyRef } from 'react';
 
 type ControlTypes =
   | 'date'
+  | 'time'
   | 'text'
   | 'number'
   | 'password'
@@ -57,6 +58,35 @@ export const Control = forwardRef<HTMLInputElement, ControlProps>(
   }
 );
 
+export const ControlShell: React.FC<any> = (props) => {
+  const {
+    className,
+    classNames,
+    label,
+    labels = {},
+    required,
+    children,
+  } = props;
+
+  return (
+    <div className={cx(`form-control w-full`, className)}>
+      {label && (
+        <label className={cx('label', required && 'label-required')}>
+          <span className="label-text">{label}</span>
+        </label>
+      )}
+      {children}
+      {labels?.bottomLeft && (
+        <label className={cx('label pb-0')}>
+          <span className={cx('label-text-alt', classNames?.labelBottomLeft)}>
+            {labels.bottomLeft}
+          </span>
+        </label>
+      )}
+    </div>
+  );
+};
+
 Control.displayName = 'Control';
 
 export interface TextInputProps {
@@ -65,11 +95,12 @@ export interface TextInputProps {
   placeholder?: string;
   status?: 'success' | 'error';
   type: ControlTypes;
+  value?: string;
 }
 
 export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   (props, ref) => {
-    const { className, disabled, placeholder, status, type } = props;
+    const { className, disabled, placeholder, status, type, value } = props;
     const Component = type === 'textarea' ? 'textarea' : 'input';
     const statusClassNameMap = {
       success: 'input-accent',
@@ -79,7 +110,8 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     return (
       <Component
         {...props}
-        ref={ref}
+        value={value}
+        ref={ref as LegacyRef<any>}
         disabled={disabled}
         className={cx(
           `w-full`,
@@ -112,11 +144,11 @@ export const SelectInput = forwardRef<
   return (
     <select
       {...props}
-      ref={ref}
+      ref={ref as LegacyRef<HTMLSelectElement>}
       className={cx('select select-bordered w-full', className)}
       disabled={disabled}
     >
-      <option disabled selected>
+      <option selected value="">
         {placeholder}
       </option>
       {options?.map((option, i) => (
@@ -135,17 +167,23 @@ interface FileInputProps {
   disabled?: boolean;
 }
 
-export const FileInput: React.FC<FileInputProps> = ({
-  className,
-  disabled,
-}) => {
-  return (
-    <input
-      type="file"
-      className={cx('file-input w-full max-w-xs', className)}
-      disabled={disabled}
-    />
-  );
-};
+export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
+  (props, ref) => {
+    const { className, disabled } = props;
+    return (
+      <input
+        ref={ref as LegacyRef<HTMLInputElement>}
+        type="file"
+        className={cx(
+          'file-input file-input-ghost file-input-bordered w-full max-w-xs',
+          className
+        )}
+        disabled={disabled}
+      />
+    );
+  }
+);
+
+FileInput.displayName = 'FileInput';
 
 export default Control;

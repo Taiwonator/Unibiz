@@ -11,10 +11,12 @@ const Health: NextPageWithLayout = () => {
   }, []);
 
   return (
-    <SocietyAdminLayout>
+    <>
       <div>Health Page</div>
-    </SocietyAdminLayout>
+    </>
   );
 };
+
+Health.getLayout = (page) => <SocietyAdminLayout>{page}</SocietyAdminLayout>;
 
 export default Health;

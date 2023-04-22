@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AlertContext } from 'src/context/AlertContext';
+import { AlertContext, AlertDispatch } from 'src/context/AlertContext';
 
 const useAlert = () => {
   const [state, setState] = useContext(AlertContext);
@@ -8,7 +8,7 @@ const useAlert = () => {
     setState((state) => ({ ...state, open: false }));
   };
 
-  const dispatchAlert = (alert) => {
+  const dispatchAlert = (alert: any) => {
     setState((state) => ({ ...state, ...alert, open: true }));
     setTimeout(() => {
       closeAlert();

@@ -26,8 +26,7 @@ const Alert: React.FC<AlertProps> = ({
   const alertRef = useRef();
 
   useEffect(() => {
-    console.log('changed');
-    const alertElement = alertRef.current;
+    const alertElement = alertRef.current as any;
     if (alertElement) {
       if (open) {
         alertElement.style.display = 'block';
@@ -48,7 +47,7 @@ const Alert: React.FC<AlertProps> = ({
 
   return (
     <div
-      ref={alertRef}
+      ref={alertRef as any}
       className={cx(
         'alert hidden shadow-lg transition-all',
         typeClassName[type]

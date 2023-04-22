@@ -9,3 +9,40 @@ export const GetAllUsersQuery = gql(`
     }
   }
 `);
+
+export const GetUserByIdQuery = gql(`
+  query GetUserById($id: String) {
+    FindUserById(id: $id) {
+      state {
+        currentGroup
+      }
+      societies {
+        id
+        name
+        shortName
+        union {
+          id
+          name
+          shortName
+        }
+        users {
+          name
+        }
+        userRequests {
+          name
+        }
+      }
+      unions {
+        id
+        name
+        shortName
+        users {
+          name
+        }
+        userRequests {
+          name
+        }
+      }
+    }
+  }
+`);

@@ -43,7 +43,7 @@ export default function SignIn({
           .validate(getValues('email'), { abortEarly: false });
         setShowPassword(true);
         // Input values are valid
-      } catch (error) {
+      } catch (error: any) {
         // Input values are invalid
         console.error(error.errors);
       }
@@ -61,8 +61,7 @@ export default function SignIn({
           password: getValues('password'),
           redirect: false,
         });
-        console.log('process: ', process);
-        const { ok, error } = process;
+        const { ok } = process as any;
         if (ok) {
           closeAlert();
           router.push('/events');
@@ -72,7 +71,7 @@ export default function SignIn({
             type: 'error',
           });
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error(error.errors);
       }
     }
@@ -90,7 +89,9 @@ export default function SignIn({
         </div>
         <form className="space-y-2">
           <TextInput type="text" {...register('email')} />
-          {showPassword && <TextInput type="text" {...register('password')} />}
+          {showPassword && (
+            <TextInput type="password" {...register('password')} />
+          )}
           <button
             className="btn bg-black w-full"
             onClick={handleSubmit(handleSignIn)}

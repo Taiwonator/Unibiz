@@ -56,5 +56,31 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
     - Button
 
 **Backend**
+
 - Create mongodb
 - Express server
+
+**TODO (pages)**
+
+- Log in
+  - Restructure database ✅
+  - Log in with Google for the first time, create a passwordless account (authIds with credentialUser, googleUser etc) MARKS INVOLVED HERE
+- Global
+  - State
+    - Selected Society / Union / Request new society / Create new society
+    - Change Details
+- Misc
+
+  - Layout depending on userType && current society / union
+  - Union FAQs
+  - Search filtering functionality (cannot be just frontend filtering) / BIG MARKS INVOLVED HERE
+  - Image uploads (AWS bucket)
+
+- Get user roles / types
+
+State (current, previous, etc)
+
+State
+
+- currentGroup
+- previouslyLoggedIn

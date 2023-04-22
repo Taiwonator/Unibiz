@@ -81,8 +81,18 @@ module.exports = {
         'body-md': ' 1rem',
         'body-lg': ' 1.125rem',
         'body-xl': ' 1.5rem',
+
+        '4xl': '2rem',
+        '5xl': '2.25rem',
+        '6xl': '2.5rem',
       },
     },
   },
-  plugins: [require('daisyui')],
+  plugins: [
+    require('daisyui'),
+    function ({ addVariant }) {
+      addVariant('child', '& > *');
+      addVariant('child-hover', '& > *:hover');
+    },
+  ],
 };

@@ -3,11 +3,17 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { initUrqlClient } from 'next-urql';
-import { LoginUser } from 'src/graphql/user/mutations.graphql';
+import { LoginCredentialsUser } from 'src/graphql/user/mutations.graphql';
 import jwt from 'jsonwebtoken';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export const authOptions: NextAuthOptions = {
-  secret: process.env.AUTH_SECRET,
+type AuthOptions = (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => NextAuthOptions;
+
+export const authOptions: AuthOptions = (req, res) => ({
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
     maxAge: 60 * 60,
@@ -21,22 +27,33 @@ export const authOptions: NextAuthOptions = {
       name: 'Custom',
       type: 'credentials',
       credentials: {},
-      async authorize(_, req) {
-        const client = initUrqlClient({ url: 'http://localhost:4000' }, false);
+      async authorize(credentials, req) {
+        const client = initUrqlClient(
+          { url: 'http://localhost:4000/graphql' },
+          false
+        );
         const result = await client
-          ?.mutation(LoginUser, {
+          ?.mutation(LoginCredentialsUser, {
             email: req.body?.email,
             password: req.body?.password,
           })
           .toPromise();
 
-        const returnedJWT = result?.data.loginUser.jwt;
+        const returnedJWT = result?.data.loginCredentialsUser.jwt;
+
         const decodedToken = jwt.decode(returnedJWT, { complete: true });
         const payload: any = decodedToken?.payload;
 
         if (!returnedJWT) {
           throw new Error('Invalid credentials');
         }
+
+        const expires = new Date(payload.exp * 1000); // Convert from seconds to milliseconds
+
+        res.setHeader(
+          'Set-Cookie',
+          `custom.access_token=${returnedJWT};path=/;Domain=localhost;httpOnly=true;expires=${expires.toUTCString()}`
+        );
 
         return { ...payload };
       },
@@ -56,13 +73,27 @@ export const authOptions: NextAuthOptions = {
       return { ...session };
     },
   },
+  events: {
+    async signOut() {
+      res.setHeader(
+        'Set-Cookie',
+        `custom.access_token=deleted;path=/;Domain=localhost;httpOnly=true;Max-Age=0`
+      );
+    },
+  },
   pages: {
     signIn: '/auth/signin',
     // signOut: '/auth/signout',
-    // error: '/auth/error', // Error code passed in query string as ?error=
+    error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // (used for check email message)
     // newUser: '/auth/new-user', // New users will be directed here on first sign in (leave the property out if not of interest)
   },
+});
+
+// export default NextAuth(authOptions);
+
+const auth = (req: NextApiRequest, res: NextApiResponse) => {
+  return NextAuth(req, res, authOptions(req, res));
 };
 
-export default NextAuth(authOptions);
+export default auth;

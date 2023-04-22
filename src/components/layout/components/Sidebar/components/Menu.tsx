@@ -28,7 +28,7 @@ export const Menu: React.FC<MenuProps> = ({
     union_rep: unionUserItems,
     '': [],
   };
-  menuItems = menuItemsMap[session?.user.type || ''];
+  menuItems = menuItemsMap[session?.user.type[0] || ''];
 
   return (
     <ul className="grid gap-2">

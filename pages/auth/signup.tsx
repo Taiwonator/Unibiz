@@ -41,7 +41,7 @@ export default function SignIn() {
         redirect: false,
       });
       router.push('/events');
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.errors);
     }
   };

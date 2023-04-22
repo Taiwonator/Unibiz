@@ -25,6 +25,8 @@ const nextConfig = {
       'via.placeholder.com',
       'logo.clearbit.com',
       'lh3.googleusercontent.com',
+      'source.unsplash.com',
+      's3unibiz.s3.eu-west-2.amazonaws.com',
     ],
   },
 };

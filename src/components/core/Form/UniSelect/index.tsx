@@ -4,8 +4,6 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { SelectInput, SelectInputProps } from '../Control';
 import { fixtures } from './fixtures';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { forwardRef, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
@@ -14,12 +12,12 @@ interface UniSelectProps extends SelectInputProps {
   classNames?: {
     input?: string;
   };
-  uniDomain?: string;
+  uniDomain: string | undefined;
 }
 
 const transformFixtures = (fixtures: any) => {
   return fixtures.map((uni: any) => ({
-    value: uni.name,
+    value: uni.id,
     label: uni.name,
   }));
 };
