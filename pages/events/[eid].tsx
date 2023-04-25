@@ -374,6 +374,8 @@ interface SimilarEventsComponentProps {
 const SimilarEventsComponent: React.FC<SimilarEventsComponentProps> = ({
   events,
 }) => {
+  if (!events?.length)
+    return <p className="text-grey3 mt-16">No previous events yet</p>;
   return (
     <div className="space-y-8 w-full">
       <ScrollableArea disabled>

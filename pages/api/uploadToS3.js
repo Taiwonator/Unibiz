@@ -104,9 +104,7 @@ const uploadToS3 = async (req, res) => {
           ACL: 'public-read',
           ContentType: fileType,
         };
-        console.log('before');
         const result = await s3.upload(params).promise();
-        console.log('result', result);
 
         urls.push(result.Location);
       }

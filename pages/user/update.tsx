@@ -119,7 +119,7 @@ const Update: NextPageWithLayout = () => {
               )}
               onClick={handleSubmit(handleUpdate)}
             >
-              Update Name
+              Update Details
             </button>
           </form>
         </div>

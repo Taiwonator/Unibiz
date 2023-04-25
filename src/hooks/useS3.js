@@ -21,7 +21,7 @@ function useS3() {
 
       const data = await res.json();
       setResponse({
-        uploadUrl: data.url,
+        uploadUrl: data.urls,
         uploadError: null,
       });
       return data;

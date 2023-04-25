@@ -37,7 +37,6 @@ export const GetSocietyById = gql(`
       totalEventLikes
       eventIds
       eventImageUrls {
-        id
         eventId
         eventImageUrl
       }

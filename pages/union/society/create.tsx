@@ -84,7 +84,7 @@ const Create: NextPageWithLayout = (props: any) => {
         name: data.name,
         shortName: data.shortName,
         description: data.description,
-        imageUrl: res?.url,
+        imageUrl: res?.urls[0],
       };
       try {
         const createSocietyResult = await client

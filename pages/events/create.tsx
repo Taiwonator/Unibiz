@@ -119,8 +119,8 @@ const Create: NextPageWithLayout = () => {
         const variables: CreateEventMutationVariables = {
           name: data.name,
           description: data.description,
-          thumbnailUrl: tRes.url,
-          bannerUrl: bRes.url,
+          thumbnailUrl: tRes.urls[0],
+          bannerUrl: bRes.urls[0],
           societyId,
           date,
           tags,

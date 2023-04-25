@@ -46,12 +46,10 @@ export type Event = Node & {
   updatedAt?: Maybe<Scalars['String']>;
 };
 
-export type EventImage = Node & {
+export type EventImage = {
   __typename?: 'EventImage';
   eventId?: Maybe<Scalars['String']>;
   eventImageUrl?: Maybe<Scalars['String']>;
-  /** Unique identifier for the resource */
-  id?: Maybe<Scalars['ID']>;
 };
 
 export enum EventType {
@@ -671,7 +669,7 @@ export type GetSocietyByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetSocietyByIdQuery = { __typename?: 'Query', FindSocietyById?: { __typename?: 'Society', id?: string | null, name?: string | null, shortName?: string | null, imageUrl?: string | null, description?: string | null, userIds?: Array<string | null> | null, createdAt?: string | null, totalEventLikes?: number | null, eventIds?: Array<string | null> | null, union?: { __typename?: 'Union', id?: string | null, name?: string | null, shortName?: string | null, imageUrl?: string | null } | null, eventImageUrls?: Array<{ __typename?: 'EventImage', id?: string | null, eventId?: string | null, eventImageUrl?: string | null } | null> | null } | null };
+export type GetSocietyByIdQuery = { __typename?: 'Query', FindSocietyById?: { __typename?: 'Society', id?: string | null, name?: string | null, shortName?: string | null, imageUrl?: string | null, description?: string | null, userIds?: Array<string | null> | null, createdAt?: string | null, totalEventLikes?: number | null, eventIds?: Array<string | null> | null, union?: { __typename?: 'Union', id?: string | null, name?: string | null, shortName?: string | null, imageUrl?: string | null } | null, eventImageUrls?: Array<{ __typename?: 'EventImage', eventId?: string | null, eventImageUrl?: string | null } | null> | null } | null };
 
 export type EditUnionMutationVariables = Exact<{
   unionId: Scalars['String'];
@@ -1313,7 +1311,6 @@ export const GetSocietyByIdDocument = gql`
     totalEventLikes
     eventIds
     eventImageUrls {
-      id
       eventId
       eventImageUrl
     }

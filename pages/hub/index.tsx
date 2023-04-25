@@ -169,7 +169,7 @@ const Hub: NextPageWithLayout = (props: any) => {
         name: data.name,
         shortName: data.shortName,
         description: data.description,
-        imageUrl: res?.url,
+        imageUrl: res?.urls[0],
       };
       try {
         const editSocietyResult = await client
@@ -185,7 +185,7 @@ const Hub: NextPageWithLayout = (props: any) => {
         unionId: aGroup.id,
         name: data.name,
         shortName: data.shortName,
-        imageUrl: res?.url,
+        imageUrl: res?.urls[0],
       };
       try {
         const editUnionResult = await client

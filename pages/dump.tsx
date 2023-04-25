@@ -225,9 +225,9 @@ const Dump: NextPageWithLayout = () => {
                     <LoadingSpinner />
                   </LoadingScreen>
                 )}
-                <div className="space-y-2">
-                  {pastEvents.length &&
-                    pastEvents.map((event: Partial<Event>) => (
+                {!!pastEvents.length && (
+                  <div className="space-y-2">
+                    {pastEvents.map((event: Partial<Event>) => (
                       <button
                         key={event.id}
                         className="block w-full text-left"
@@ -246,7 +246,8 @@ const Dump: NextPageWithLayout = () => {
                         />
                       </button>
                     ))}
-                </div>
+                  </div>
+                )}
               </ScrollableArea>
             </div>
           </div>

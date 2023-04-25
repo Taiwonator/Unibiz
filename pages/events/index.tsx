@@ -442,7 +442,8 @@ export const EventComponent: React.FC<EventComponentProps> = ({
       const res = await client
         ?.mutation(DeleteEventMutation, { eventId: id })
         .toPromise();
-      if (!res.error) {
+      if (!res.error && res.data) {
+        // console.log(res);
         router.reload();
       }
     } catch (e) {
