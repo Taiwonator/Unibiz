@@ -6,78 +6,17 @@ import TabbedArea, { tabsFixture } from '@components/core/TabbedArea';
 import Control, { TextInput } from '@components/core/Form/Control';
 import { Search, UniSelect } from '@components/core/Form';
 import MinimialLayout from '@components/layout/MinimalLayout';
+import BaseLayout from '@components/layout/BaseLayout';
+import { LoadingScreen, LoadingSpinner } from '@components/primitive/Loading';
 
 const Home: NextPageWithLayout = () => {
-  // const { data: session } = useSession();
-  // const router = useRouter();
-  // if (session?.user) {
-  //   switch (session?.user.type) {
-  //     case 'society_organiser':
-  //       router.push('/society');
-  //       break;
-  //     case 'union_rep':
-  //       router.push('/union');
-  //       break;
-  //     default:
-  //       router.push('/society');
-  //       break;
-  //   }
-  // }
-
   return (
     <MinimialLayout>
-      <div className="space-y-4 container-lg py-4">
-        <div>loading...</div>
-        <Control placeholder="placeholder text" label="Email" type="text" />
-        <Control
-          placeholder="placeholder text"
-          classNames={{
-            input: 'select-bordered',
-          }}
-          label="University"
-          type="select"
-          status="error"
-          options={[
-            {
-              label: 'Option 1',
-              value: 'option1',
-            },
-            {
-              label: 'Option 2',
-              value: 'option2',
-            },
-            {
-              label: 'Option 3',
-              value: 'option3',
-            },
-          ]}
-        />
-        <Control
-          placeholder="placeholder text"
-          label="Enter your Password"
-          type="password"
-        />
-        <Control
-          placeholder="placeholder text"
-          label="Repeat your Password"
-          type="password"
-        />
-        <Search />
-        <Control
-          placeholder="placeholder text"
-          label="Repeat your Password"
-          type="file"
-          disabled
-        />
-      </div>
+      <LoadingScreen>
+        <LoadingSpinner />
+      </LoadingScreen>
     </MinimialLayout>
   );
 };
 
 export default Home;
-
-// Objects
-// -- User
-// -- // -- Event
-// -- // -- Union
-// -- // -- Society

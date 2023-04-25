@@ -7,22 +7,27 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { NextPageWithLayout } from 'pages/_app';
 import { useEffect, useState } from 'react';
-import { FaArrowLeft, FaCheck, FaCopy, FaCross } from 'react-icons/fa';
+import {
+  FaArrowLeft,
+  FaArrowRight,
+  FaCheck,
+  FaCopy,
+  FaCross,
+} from 'react-icons/fa';
 import { RxCheck, RxCross1 } from 'react-icons/rx';
 import cx from 'classnames';
-import { User } from 'generated/graphql';
 import { useSession } from 'next-auth/react';
-import { LoadingElement } from '@components/primitive/Loading';
-import useModal from '@hooks/useModal';
 import { useQueryHelpers } from '@hooks/useQueryHelpers';
+import useModal from '@hooks/useModal';
+import { Society, Union } from 'generated/graphql';
 import {
-  ProcessUserRequestMutation,
-  RemoveUserFromGroupMutation,
-} from 'src/graphql/group/mutations.graphql';
+  ProcessSocietyRequestMutation,
+  RemoveSocietyFromUnionMutation,
+} from 'src/graphql/union/mutations.graphql';
 
 type TabType = 'Members' | 'Requests';
 
-const Team: NextPageWithLayout = (props: any) => {
+const Societies: NextPageWithLayout = (props: any) => {
   const { setActiveNavItem } = useNavigation();
   const { aGroup } = useApp();
   const router = useRouter();
@@ -30,7 +35,6 @@ const Team: NextPageWithLayout = (props: any) => {
   const { data: session } = useSession();
   const { client } = useQueryHelpers();
   const { dispatchModal, generateProceedOrCancelComponent } = useModal();
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   useEffect(() => {
     setActiveNavItem('hub');
@@ -41,29 +45,28 @@ const Team: NextPageWithLayout = (props: any) => {
   };
 
   const handleAction = (
-    userId: string,
+    society: string,
     prompt: string,
-    next: (userId: string) => void
+    next: (society: string) => void
   ) => {
-    if (userId) {
+    if (society) {
       dispatchModal(
         generateProceedOrCancelComponent({
           options: {
             prompt,
-            action: () => next(userId),
+            action: () => next(society),
           },
         })
       );
     }
   };
 
-  const handleRemoverUser = async (userId: string) => {
+  const handleRemoverUser = async (societyId: string) => {
     if (aGroup) {
-      console.log(userId);
       const res = await client
-        ?.mutation(RemoveUserFromGroupMutation, {
-          userId: userId,
-          groupId: aGroup.id,
+        ?.mutation(RemoveSocietyFromUnionMutation, {
+          societyId: societyId,
+          unionId: aGroup.id,
         })
         .toPromise();
       if (!res.error) {
@@ -73,22 +76,23 @@ const Team: NextPageWithLayout = (props: any) => {
   };
 
   const handleProcessUserRequest =
-    (userId: string) => async (accept: boolean) => {
+    (societyId: string) => async (accept: boolean) => {
       if (aGroup) {
-        console.log(userId);
         const res = await client
-          ?.mutation(ProcessUserRequestMutation, {
-            userId: userId,
-            groupId: aGroup.id,
+          ?.mutation(ProcessSocietyRequestMutation, {
+            societyId: societyId,
+            unionId: aGroup.id,
             accept,
           })
           .toPromise();
         if (!res.error) {
-          console.log(res, userId);
           router.reload();
         }
       }
     };
+
+  // societies
+  // societyRequests
 
   return (
     <>
@@ -98,14 +102,8 @@ const Team: NextPageWithLayout = (props: any) => {
             <button onClick={() => handleBack()}>
               <FaArrowLeft className="text-positive" />
             </button>
-            <span>Manage Team</span>
+            <span>Manage Societies</span>
           </h2>
-          {/* <div className="space-x-4">
-            <button className="btn btn-outline border-solid bg-white text-black gap-2">
-              Copy Invite Link
-              <FaCopy />
-            </button>
-          </div> */}
         </div>
       </div>
       <div className="bg-grey0 mt-16">
@@ -125,57 +123,56 @@ const Team: NextPageWithLayout = (props: any) => {
               </button>
             ))}
           </div>
-          {/* <Search placeholder="Search for team..." /> */}
           <ScrollableArea>
             <>
               {session && (
                 <div className="space-y-4">
                   {activeTab === 'Members' &&
-                    aGroup?.users?.map(
-                      (user, i) =>
-                        !!user &&
-                        user.id &&
-                        user.id != session.user.id && (
-                          <TeamMember
+                    (aGroup as Union)?.societies?.map(
+                      (society, i) =>
+                        !!society &&
+                        society.id &&
+                        society.id != session.user.id && (
+                          <SocietyMember
                             key={i}
-                            user={user}
+                            society={society}
                             type="Members"
                             onCross={() =>
                               handleAction(
-                                user.id as string,
+                                society.id as string,
                                 'Removing...',
-                                () => handleRemoverUser(user.id as string)
+                                () => handleRemoverUser(society.id as string)
                               )
                             }
                           />
                         )
                     )}
                   {activeTab === 'Requests' &&
-                    aGroup?.userRequests?.map(
-                      (user, i) =>
-                        !!user && (
-                          <TeamMember
+                    (aGroup as Union)?.societyRequests?.map(
+                      (society, i) =>
+                        !!society && (
+                          <SocietyMember
                             key={i}
-                            user={user}
+                            society={society}
                             type="Requests"
                             onTick={() =>
                               handleAction(
-                                user.id as string,
+                                society.id as string,
                                 'Accepting...',
                                 () =>
-                                  handleProcessUserRequest(user.id as string)(
-                                    true
-                                  )
+                                  handleProcessUserRequest(
+                                    society.id as string
+                                  )(true)
                               )
                             }
                             onCross={() =>
                               handleAction(
-                                user.id as string,
+                                society.id as string,
                                 'Rejecting...',
                                 () =>
-                                  handleProcessUserRequest(user.id as string)(
-                                    false
-                                  )
+                                  handleProcessUserRequest(
+                                    society.id as string
+                                  )(false)
                               )
                             }
                           />
@@ -191,15 +188,15 @@ const Team: NextPageWithLayout = (props: any) => {
   );
 };
 
-interface TeamMemberProps {
-  user: User;
+interface SocietyMemberProps {
+  society: Society;
   type: TabType;
   onTick?: () => void;
   onCross: () => void;
 }
 
-const TeamMember: React.FC<TeamMemberProps> = ({
-  user,
+const SocietyMember: React.FC<SocietyMemberProps> = ({
+  society,
   type,
   onTick,
   onCross,
@@ -208,8 +205,10 @@ const TeamMember: React.FC<TeamMemberProps> = ({
     <div className="w-full border-b-2">
       <div className="flex justify-between items-center py-4 space-y-4">
         <div className="flex items-center space-x-4">
-          <p className="text-md">{user.name}</p>
-          <p className="text-sm text-grey3">{user.email}</p>
+          <p className="text-md">{society.name}</p>
+          <NextLink href={`/union/society/${society.id}`} target="_blank">
+            <FaArrowRight className="text-positive" />
+          </NextLink>
         </div>
         <div className="flex text-2xl">
           <button className="p-4" onClick={onTick}>
@@ -226,6 +225,6 @@ const TeamMember: React.FC<TeamMemberProps> = ({
   );
 };
 
-Team.getLayout = (page) => <SocietyAdminLayout>{page}</SocietyAdminLayout>;
+Societies.getLayout = (page) => <SocietyAdminLayout>{page}</SocietyAdminLayout>;
 
-export default Team;
+export default Societies;

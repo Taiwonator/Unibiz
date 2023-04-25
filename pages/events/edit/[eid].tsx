@@ -34,27 +34,27 @@ import useModal from '@hooks/useModal';
 
 type LocationType = 'address' | 'online' | 'tbd';
 
+const FILE_TYPES = ['image/png', 'image/jpeg'];
+export const optionalImageSchema = yup
+  .mixed()
+  .test('fileType', 'File must be a PNG or JPEG image', (value: any) => {
+    if (value.length) {
+      if (!value || !value[0]) {
+        return false;
+      }
+      const type = value[0].type;
+      return FILE_TYPES.includes(type);
+    } else {
+      return true;
+    }
+  });
+
 const Edit: NextPageWithLayout = () => {
   const { aGroup } = useApp();
   const [tags, setTags] = useState<EventType[]>([]);
   const [locationType, setLocationType] = useState<LocationType>('address');
   const { uploadToS3, uploadResponse } = useS3();
   const { context, client } = useQueryHelpers();
-
-  const FILE_TYPES = ['image/png', 'image/jpeg'];
-  const imageSchema = yup
-    .mixed()
-    .test('fileType', 'File must be a PNG or JPEG image', (value: any) => {
-      if (value.length) {
-        if (!value || !value[0]) {
-          return false;
-        }
-        const type = value[0].type;
-        return FILE_TYPES.includes(type);
-      } else {
-        return true;
-      }
-    });
 
   const schema = yup.object().shape({
     name: yup.string(),
@@ -64,8 +64,8 @@ const Edit: NextPageWithLayout = () => {
     address: yup.string().nullable(),
     locationLink: yup.string().nullable(),
     registerLink: yup.string(),
-    bannerImage: imageSchema,
-    thumbmailImage: imageSchema,
+    bannerImage: optionalImageSchema,
+    thumbmailImage: optionalImageSchema,
   });
   // .test(
   //   'either-address-or-link',
@@ -155,10 +155,10 @@ const Edit: NextPageWithLayout = () => {
     const bFile = data.bannerImage?.[0];
     let tRes, bRes;
     if (tFile) {
-      tRes = await uploadToS3(tFile);
+      tRes = await uploadToS3([tFile]);
     }
     if (bFile) {
-      bRes = await uploadToS3(bFile);
+      bRes = await uploadToS3([bFile]);
     }
     const date = String(setTimeOnDate(data.date, data.time));
 
@@ -228,8 +228,8 @@ const Edit: NextPageWithLayout = () => {
       {/* {bannerImage && (
         // <img src={createObjectURL(bannerImage[0])} alt="Preview" />
       )} */}
-      <div className="container-md min-h-screen space-y-8 pt-16 py-10">
-        <form className="space-y-4">
+      <div className="container-md min-h-screen space-y-16 pt-16 py-10">
+        <form className="space-y-8">
           <p className="font-bold md:text-4xl">{name}</p>
           <Control
             placeholder="Worship Night"

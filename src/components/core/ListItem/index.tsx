@@ -49,7 +49,10 @@ const ListItem: React.FC<ListItemProps> = ({
               <h3 className="text-lg font-medium">{labels?.middleLeft}</h3>
             </div>
             {uni.name && (
-              <span className="inline-flex items-center gap-1 text-sm order-2 my-1 ">
+              <span
+                data-tip="Union | Society"
+                className="tooltip inline-flex items-center gap-1 text-sm order-2 my-1 "
+              >
                 {uni.verified && (
                   <div className="tooltip" data-tip="Verified">
                     <FaStar className="text-positive" />

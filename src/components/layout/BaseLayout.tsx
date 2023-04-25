@@ -17,7 +17,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children }) => {
 
   return (
     <AuthProtect>
-      <div className="fixed left-[50%] top-20 w-screen z-20 container-md -translate-x-[50%]">
+      <div className="fixed left-[50%] top-20 w-screen z-[100] container-md -translate-x-[50%]">
         <Alert type={alert.type} open={alert.open} onClose={() => closeAlert()}>
           {alert.text}
         </Alert>
@@ -72,7 +72,11 @@ const AuthProtect = ({ children }: AuthProtectProps) => {
     if (adminOnlyPaths.includes(router.pathname) && isAGuest) {
       router.replace('/events');
     }
-  }, [isASociety, isAGuest]);
+
+    if (router.pathname === '/') {
+      router.replace('/events');
+    }
+  }, [isASociety, isAGuest, router, session, status]);
 
   return <>{children}</>;
 };

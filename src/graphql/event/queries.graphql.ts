@@ -7,6 +7,31 @@ export const GetAllEventsQuery = gql(`
       name
       tags
       bannerUrl
+      likes
+      thumbnailUrl
+      society {
+        id
+        name
+        shortName
+        union {
+          id
+          name 
+          shortName
+        }
+      }
+      date
+      createdAt
+    }
+  }
+`);
+
+export const GetUnverifiedEventsQuery = gql(`
+  query FindUnverifiedEvents {
+    FindUnverifiedEvents {
+       id
+      name
+      tags
+      bannerUrl
       thumbnailUrl
       society {
         id
@@ -33,7 +58,9 @@ export const GetEventById = gql(`
       bannerUrl
       description
       date
+      likes
       registerLink
+      eventImageUrls
       location {
         type
         address

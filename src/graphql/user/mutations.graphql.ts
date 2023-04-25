@@ -13,15 +13,22 @@ export const LoginCredentialsUser = gql(`
 `);
 
 export const CreateUsersQuery = gql(`
-  mutation CreateUser($email: String!, $password: String!, $name: String!, $type: String) {
+  mutation CreateUser($email: String!, $password: String!, $name: String!) {
     createUser
     (
         email: $email,
         password: $password,
         name: $name,
-        type: $type,
     ) {
         jwt
+    }
+  }
+`);
+
+export const CreatePasswordlessUserMutation = gql(`
+  mutation CreatePasswordlessUser($email: String, $name: String) {
+    createPasswordlessUser(email: $email, name: $name) {
+      jwt
     }
   }
 `);
@@ -31,6 +38,23 @@ export const UpdateUserCurrentGroupQuery = gql(`
     setUserCurrentGroup(userId: $userId, groupId: $groupId) {
       id
       currentGroup
+    }
+  }
+`);
+
+export const UpdateUserNameMutation = gql(`
+  mutation UpdateUserName($userId: String!, $name: String!) {
+    updateUserName(id: $userId, name: $name) {
+      id
+    }
+  }
+`);
+
+export const DeleteEventMutation = gql(`
+  mutation DeleteEvent($eventId: String!) {
+    deleteEvent(id: $eventId) {
+      id
+      name
     }
   }
 `);

@@ -30,14 +30,9 @@ const useApp = () => {
 
   const setAGroup = (group: any, userId?: string) => {
     setState((state: State) => ({ ...state, group, guestView: false }));
-    console.log('group updated');
     if (userId) {
-      setAGroupById(userId, group.groupId);
+      setAGroupById(group.groupId, userId);
     }
-  };
-
-  const clearAGroup = () => {
-    setState((state: State) => ({ ...state, group: {} }));
   };
 
   const setAGroupById = async (groupId?: string, userId?: string) => {
@@ -49,14 +44,35 @@ const useApp = () => {
             groupId,
           })
           .toPromise();
-        console.log('updated result: ', updateResult, userId, groupId);
         return updateResult;
       } catch (e) {
+        console.log(e);
         throw e;
       }
     } else {
       return null;
     }
+  };
+
+  const clearAGroup = async (userId: string, next: () => void) => {
+    setState((state: State) => ({ ...state, group: {} }));
+    try {
+      const updateResult = await client
+        ?.mutation(UpdateUserCurrentGroupQuery, {
+          userId,
+          groupId: null,
+        })
+        .toPromise();
+      next();
+      return updateResult;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  };
+
+  const clearAGroupTemp = async () => {
+    setState((state: State) => ({ ...state, group: {} }));
   };
 
   type IsVerified = (g: Group | null | undefined) => boolean;
@@ -77,8 +93,11 @@ const useApp = () => {
   };
 
   const enableGuestView = () => {
-    setState((state: State) => ({ ...state, guestView: true }));
-    clearAGroup();
+    const enable = () => {
+      setState((state: State) => ({ ...state, guestView: true }));
+      clearAGroupTemp();
+    };
+    enable();
   };
 
   const getAUserType = () => {
@@ -110,6 +129,7 @@ const useApp = () => {
     isAGuest: state.guestView,
     clearAState,
     clearAGroup,
+    clearAGroupTemp,
     enableGuestView,
     getAUserType,
     setASociety,

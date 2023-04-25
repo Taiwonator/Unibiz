@@ -3,22 +3,32 @@ import cx from 'classnames';
 import { Event } from 'generated/graphql';
 import moment from 'moment';
 import Image from 'next/image';
-import { FaCertificate, FaEdit, FaHeart } from 'react-icons/fa';
-import { RxHeart } from 'react-icons/rx';
+import { FaCertificate, FaEdit, FaHeart, FaStar } from 'react-icons/fa';
+import { RxHeart, RxHeartFilled } from 'react-icons/rx';
 import NextLink from 'next/link';
 import useApp from '@hooks/useApp';
+import { useRouter } from 'next/router';
 
 interface EventHeroProps {
   className?: string;
   event?: Partial<Event>;
+  liked: boolean;
+  onLiked: () => void;
 }
 
-const EventHero: React.FC<EventHeroProps> = ({ className, event }) => {
+const EventHero: React.FC<EventHeroProps> = ({
+  className,
+  event,
+  liked,
+  onLiked,
+}) => {
   const { aGroup } = useApp();
+  const router = useRouter();
   if (!event)
     return <div className="grid relative min-h-[320px] bg-skeleton" />;
 
-  const { name, society, bannerUrl, date, registerLink } = event;
+  const { name, society, bannerUrl, date, registerLink, likes } = event;
+  console.log(likes);
   const hasUnion = (event: any) => !!event.society.union;
 
   return (
@@ -43,9 +53,22 @@ const EventHero: React.FC<EventHeroProps> = ({ className, event }) => {
         <div className="flex flex-row justify-between">
           <div className="inline-flex relative items-center gap-2 text-white px-6 py-2 bg-black/75 rounded-md font-bold md:text-2xl">
             {hasUnion(event) && (
-              <FaCertificate className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 text-positive" />
+              <div
+                className="tooltip tooltip-bottom absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2"
+                data-tip="Verified"
+              >
+                <FaStar className="text-positive" />
+              </div>
             )}
-            <h3>{event?.society?.name}</h3>
+            <button
+              onClick={() =>
+                router.push(`/union/society/${event.society.id}`, undefined, {
+                  shallow: false,
+                })
+              }
+            >
+              {event?.society?.name}
+            </button>
             {hasUnion(event) && (
               <>
                 <p className="text-purple">|</p>
@@ -75,11 +98,22 @@ const EventHero: React.FC<EventHeroProps> = ({ className, event }) => {
               </p>
             </div>
             <div className="bg-white text-black flex items-center px-4 space-x-4">
-              <p className="text-xl font-bold md:text-5xl">{name}</p>
-              {aGroup?.id !== event?.society?.id && (
-                <button>
-                  <RxHeart className="text-red text-2xl md:text-6xl" />
+              <p className="text-xl font-bold md:text-4xl">{name}</p>
+              {aGroup?.id !== event?.society?.id ? (
+                <button onClick={onLiked}>
+                  {liked ? (
+                    <RxHeartFilled className="text-red text-2xl md:text-6xl" />
+                  ) : (
+                    <RxHeart className="text-red text-2xl md:text-6xl" />
+                  )}
                 </button>
+              ) : (
+                <label className="relative">
+                  <RxHeart className="text-red text-2xl md:text-7xl" />
+                  <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-red text-xs">
+                    {likes}
+                  </p>
+                </label>
               )}
             </div>
           </div>

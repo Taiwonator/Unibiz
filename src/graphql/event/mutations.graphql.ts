@@ -17,3 +17,27 @@ export const EditEventMutation = gql(`
     }
   }
 `);
+
+export const LikeEventMutation = gql(`
+  mutation LikeEvent($eventId: String!) {
+    likeEvent(id: $eventId) {
+      id
+      likes
+      name
+    }
+  }
+`);
+
+export const AddEventImageUrlsMutation = gql(`
+  mutation AddEventImageUrls($eventId: String!, $imageUrls: [String!]!) {
+    addEventImageUrls(id: $eventId, imageUrls: $imageUrls) {
+      id
+    }
+  }
+`);
+
+export const DeleteEventImageUrlMutation = gql(`
+  mutation DeleteEventImageUrl($eventId: String!, $imageUrl: String!) {
+    deleteEventImageUrl(id: $eventId, imageUrl: $imageUrl)
+  }
+`);

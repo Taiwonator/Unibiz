@@ -9,12 +9,18 @@ export const GetGroupById = gql(`
                 shortName
                 description
                 imageUrl
+                userIds
                 users {
+                    id
                     name
+                    email
                 }
                 userRequests {
+                    id
                     name
+                    email
                 }
+                userRequestIds
                 union {
                     id
                     name
@@ -28,11 +34,18 @@ export const GetGroupById = gql(`
                 shortName
                 createdAt
                 imageUrl
+                userIds
                 users {
+                    id
                     name
+                    email
                 }
+                userRequestIds
+                societyRequestIds
                 userRequests {
+                    id
                     name
+                    email
                 }
                 uni {
                     name
@@ -42,6 +55,16 @@ export const GetGroupById = gql(`
                     name
                     shortName
                     createdAt
+                }
+                 societyRequests {
+                    id
+                    name
+                    shortName
+                }
+                faqs {
+                    id
+                    question
+                    answer
                 }
             }
         }

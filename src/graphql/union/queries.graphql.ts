@@ -7,15 +7,25 @@ export const GetAllUnionsQuery = gql(`
       name
       shortName
       createdAt
+      imageUrl
       uni {
         name
+      }
+      faqs {
+        id
+        question
+        answer
       }
       societies {
         id
         name
         shortName
+        imageUrl
         createdAt
       }
+      userIds
+      societyIds
+      societyRequestIds
     }
   }
 `);

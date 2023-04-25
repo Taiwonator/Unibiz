@@ -13,6 +13,7 @@ export const GetAllUsersQuery = gql(`
 export const GetUserByIdQuery = gql(`
   query GetUserById($id: String) {
     FindUserById(id: $id) {
+      name
       state {
         currentGroup
       }
@@ -43,6 +44,14 @@ export const GetUserByIdQuery = gql(`
           name
         }
       }
+    }
+  }
+`);
+
+export const GetUserByEmail = gql(`
+  query GetUserByEmail($email: String) {
+    FindUserByEmail(email: $email) {
+      id
     }
   }
 `);

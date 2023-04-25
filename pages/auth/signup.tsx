@@ -13,7 +13,7 @@ export default function SignIn() {
   const schema = yup.object().shape({
     name: yup.string().required(),
     email: yup.string().email().required(),
-    userType: yup.string().required(),
+    // userType: yup.string().required(),
     password: yup.string().required(),
     confirmPassword: yup
       .string()
@@ -28,21 +28,28 @@ export default function SignIn() {
   });
 
   const handleSignUp = async () => {
-    await executeMutation({
+    const createUserRes = await executeMutation({
       name: getValues('name'),
       email: getValues('email'),
-      type: getValues('userType'),
+      // type: getValues('userType'),
+      // type: null,
       password: getValues('password'),
     });
-    try {
-      await signIn('credentials', {
-        email: getValues('email'),
-        password: getValues('password'),
-        redirect: false,
-      });
-      router.push('/events');
-    } catch (error: any) {
-      console.error(error.errors);
+    console.log(createUserRes);
+    if (!createUserRes.error) {
+      try {
+        const signInRes = await signIn('credentials', {
+          email: getValues('email'),
+          password: getValues('password'),
+          redirect: false,
+        });
+        console.log(signInRes);
+        if (signInRes) {
+          if (!signInRes.error) router.push('/events');
+        }
+      } catch (error: any) {
+        console.error(error.errors);
+      }
     }
   };
 
@@ -68,7 +75,7 @@ export default function SignIn() {
             {...register('email')}
           />
 
-          <Control
+          {/* <Control
             placeholder="pick a user type"
             classNames={{
               input: 'select-bordered',
@@ -86,7 +93,7 @@ export default function SignIn() {
               },
             ]}
             {...register('userType')}
-          />
+          /> */}
 
           <Control
             placeholder="**********"

@@ -4,7 +4,11 @@ import ListItem from '@components/core/ListItem';
 import ScrollableArea from '@components/core/ScrollableArea';
 import TabbedArea from '@components/core/TabbedArea';
 import SocietyAdminLayout from '@components/layout/SocietyAdminLayout';
-import { LoadingSpinner, LoadingScreen } from '@components/primitive/Loading';
+import {
+  LoadingSpinner,
+  LoadingScreen,
+  LoadingElement,
+} from '@components/primitive/Loading';
 import useAlert from '@hooks/useAlert';
 import { formatTimestamp } from '@lib/date-formatter';
 import { retrieveDays } from '@lib/days-retreiver';
@@ -18,10 +22,19 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactNode, useEffect, useRef, useState, forwardRef } from 'react';
-import { FaCalendar, FaClock, FaLocationArrow, FaShare } from 'react-icons/fa';
+import {
+  FaCalendar,
+  FaClock,
+  FaImage,
+  FaLocationArrow,
+  FaShare,
+  FaTrash,
+  FaWindows,
+} from 'react-icons/fa';
 import {
   RxCalendar,
   RxHeart,
+  RxHeartFilled,
   RxPinBottom,
   RxSewingPin,
   RxShare1,
@@ -32,16 +45,66 @@ import { Bottom } from '@components/primitive/Overlay';
 import useApp from '@hooks/useApp';
 import { useQueryHelpers } from '@hooks/useQueryHelpers';
 import { GetPastEvents } from 'src/graphql/event/queries.graphql';
+import {
+  DeleteEventImageUrlMutation,
+  LikeEventMutation,
+} from 'src/graphql/event/mutations.graphql';
+import Image from 'next/image';
+import useModal from '@hooks/useModal';
+import useNavigation from '@hooks/useNavigation';
 
 const Event: NextPageWithLayout = () => {
   const router = useRouter();
+  const { setActiveNavItem } = useNavigation();
   const { aGroup } = useApp();
   const { client } = useQueryHelpers();
   const { eid } = router.query;
   const [activeTab, setActiveTab] = useState('details');
+  const [liked, setLiked] = useState<boolean>(false);
 
   const [result] = useGetEventByIdQuery({ variables: { id: eid as string } });
   const { data, fetching, error } = result;
+
+  useEffect(() => {
+    setActiveNavItem('events');
+  }, []);
+
+  const handleLiked = async () => {
+    if (!liked) {
+      setLiked(true);
+      const likedEvents = JSON.parse(
+        sessionStorage.getItem('likedEvents') || '[]'
+      );
+      likedEvents.push(eid);
+      const updatedValue = JSON.stringify(likedEvents);
+      sessionStorage.setItem('likedEvents', updatedValue);
+
+      if (data) {
+        try {
+          const res = await client
+            ?.mutation(LikeEventMutation, {
+              eventId: eid,
+            })
+            .toPromise();
+          console.log('res: ', res);
+
+          if (!res.error) {
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    const likedEvents = JSON.parse(
+      sessionStorage.getItem('likedEvents') || '[]'
+    );
+    if (likedEvents.includes(eid)) {
+      setLiked(true);
+    }
+  }, [liked, eid]);
 
   const [displayedEvents, setDisplayedEvents] = useState([]);
   useEffect(() => {
@@ -73,7 +136,11 @@ const Event: NextPageWithLayout = () => {
 
   return (
     <div className="pb-16">
-      <EventHero event={data?.FindEventById} />
+      <EventHero
+        event={data?.FindEventById}
+        liked={liked}
+        onLiked={() => handleLiked()}
+      />
 
       <div className="container-lg mt-16">
         <BasicTabbedArea
@@ -83,7 +150,13 @@ const Event: NextPageWithLayout = () => {
               {
                 id: 'details',
                 label: 'Details',
-                Component: <DetailsComponent event={data?.FindEventById} />,
+                Component: (
+                  <DetailsComponent
+                    event={data?.FindEventById}
+                    liked={liked}
+                    onLiked={() => handleLiked()}
+                  />
+                ),
               },
               {
                 id: 'similar-events',
@@ -100,6 +173,8 @@ const Event: NextPageWithLayout = () => {
 
 interface DetailsComponentProps {
   event: Partial<Event>;
+  liked: boolean;
+  onLiked: () => void;
 }
 
 enum LocationType {
@@ -108,14 +183,19 @@ enum LocationType {
   TBD,
 }
 
-const DetailsComponent: React.FC<DetailsComponentProps> = ({ event }) => {
+const DetailsComponent: React.FC<DetailsComponentProps> = ({
+  event,
+  liked,
+  onLiked,
+}) => {
   const router = useRouter();
   const fullUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}${router.asPath}`;
   const [ref, inView] = useInView();
   const { aGroup } = useApp();
-
   const { tags, description, location, date, registerLink } = event || {};
   const { dispatchAlert } = useAlert();
+  const { client } = useQueryHelpers();
+  const { dispatchModal, generateProceedOrCancelComponent } = useModal();
   const copyToClipboard = (e: any) => {
     e.preventDefault();
     navigator.clipboard.writeText(e.target.innerText);
@@ -125,66 +205,146 @@ const DetailsComponent: React.FC<DetailsComponentProps> = ({ event }) => {
     });
   };
 
-  return (
-    <div className="space-y-8 md:mt-12">
-      <Tags tags={tags} />
-      <p className="text-sm">{description}</p>
-      <Detail
-        label="Location"
-        Icon={<RxSewingPin className="text-red" />}
-        Value={
-          <p className="text-md">
-            {location?.type === 'ADDRESS'
-              ? location.address
-              : location?.type === 'ONLINE'
-              ? location?.link
-              : 'TBC'}
-          </p>
-        }
-      />
-      <Detail
-        label="Time"
-        Icon={<RxCalendar className="text-positive" />}
-        Value={<p className="text-xl">{formatTimestamp(date)}</p>}
-      />
-      <Detail
-        label="Share Link"
-        Icon={<RxShare1 />}
-        Value={
-          <button className="text-xs" onClick={(e) => copyToClipboard(e)}>
-            {fullUrl}
-          </button>
-        }
-      />
-      <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
-        {aGroup?.id !== event?.society?.id && (
-          <button className="btn inline-flex gap-2 bg-white text-black font-bold px-8 btn-outline border-solid">
-            <RxHeart className="text-red text-lg" /> I am Interested
-          </button>
-        )}
+  const handleImageDelete = (imageUrl: string) => {
+    dispatchModal(
+      generateProceedOrCancelComponent({
+        options: {
+          prompt: `Are you sure you'd like to delete this image?`,
+          action: () => deleteImage(imageUrl),
+        },
+      })
+    );
+  };
 
-        {registerLink && (
-          <NextLink href={registerLink} target="_blank">
-            <button
-              ref={ref}
-              className="btn inline-flex gap-2 bg-black font-bold px-8"
-            >
-              Register Now
+  const deleteImage = async (imageUrl: string) => {
+    const res = await client
+      ?.mutation(DeleteEventImageUrlMutation, {
+        eventId: event.id,
+        imageUrl,
+      })
+      .toPromise();
+    console.log(res);
+    if (!res.error) {
+      router.reload();
+    }
+  };
+
+  const showDeleteButton = () => {
+    if (aGroup && event) {
+      if (event.society) {
+        return aGroup.id === event.society.id;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
+  return (
+    <div className="space-y-8 md:flex">
+      <div className="space-y-8 md:mt-12 md:flex-1">
+        <Tags tags={tags} />
+        <p className="text-sm">{description}</p>
+        <Detail
+          label="Location"
+          Icon={<RxSewingPin className="text-red" />}
+          Value={
+            <p className="text-md">
+              {location?.type === 'ADDRESS'
+                ? location.address
+                : location?.type === 'ONLINE'
+                ? location?.link
+                : 'TBC'}
+            </p>
+          }
+        />
+        <Detail
+          label="Time"
+          Icon={<RxCalendar className="text-positive" />}
+          Value={<p className="text-xl">{formatTimestamp(date)}</p>}
+        />
+        <Detail
+          label="Share Link"
+          Icon={<RxShare1 />}
+          Value={
+            <button className="text-xs" onClick={(e) => copyToClipboard(e)}>
+              {fullUrl}
             </button>
-          </NextLink>
-        )}
-        {!inView && registerLink && (
-          <Bottom>
-            <div className="flex justify-end">
-              <NextLink href={registerLink} target="_blank">
-                <button className="btn gap-2 bg-black font-bold px-8 z-10">
-                  Register Now
-                </button>
-              </NextLink>
-            </div>
-          </Bottom>
-        )}
+          }
+        />
+        <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
+          {aGroup?.id !== event?.society?.id && (
+            <button
+              className="btn inline-flex gap-2 bg-white text-black font-bold px-8 btn-outline border-solid"
+              onClick={onLiked}
+            >
+              {liked ? (
+                <RxHeartFilled className="text-red text-lg" />
+              ) : (
+                <RxHeart className="text-red text-lg" />
+              )}
+              {liked ? 'Event liked :)' : 'I am Interested'}
+            </button>
+          )}
+
+          {registerLink && (
+            <NextLink href={registerLink} target="_blank">
+              <button
+                ref={ref}
+                className="btn inline-flex gap-2 bg-black font-bold px-8"
+              >
+                Register Now
+              </button>
+            </NextLink>
+          )}
+          {!inView && registerLink && (
+            <Bottom>
+              <div className="flex justify-end">
+                <NextLink href={registerLink} target="_blank">
+                  <button className="btn gap-2 bg-black font-bold px-8 z-10">
+                    Register Now
+                  </button>
+                </NextLink>
+              </div>
+            </Bottom>
+          )}
+        </div>
       </div>
+      {!!event?.eventImageUrls?.length && (
+        <div className="space-y-4">
+          <h3 className="text-sm font-bold">Event Pictures</h3>
+          <div className="relative h-96 carousel carousel-vertical rounded-box">
+            {event.eventImageUrls?.length &&
+              event.eventImageUrls.map((imageUrl, i) => (
+                <div key={i} className="relative carousel-item h-full">
+                  {/* <Image
+                src={imageUrl as string}
+                alt="Event Carousel"
+                style={{ objectFit: 'contain' }}
+              /> */}
+                  <img
+                    src={imageUrl as string}
+                    className="object-cover w-full"
+                    alt="Event Carousel"
+                    loading="eager"
+                  />
+                  {showDeleteButton() && (
+                    <button
+                      className="bg-red text-white absolute right-4 top-4 p-4 rounded-full hover:bg-errordark"
+                      onClick={() => handleImageDelete(imageUrl)}
+                    >
+                      <FaTrash />
+                    </button>
+                  )}
+                </div>
+              ))}
+            {!event.eventImageUrls?.length && (
+              <LoadingElement className="absolute h-full w-full left-0 top-0 -z-10" />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

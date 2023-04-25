@@ -1,16 +1,18 @@
 import gql from 'graphql-tag';
 
 export const GetAllSocietiesQuery = gql(`
-  query GetAllSocieties {
-    Society {
+  query GetAllSocieties($verified: Boolean) {
+    Society(verified: $verified) {
       id
       name
       shortName
+      imageUrl
       union {
         id
         name
         shortName
       }
+      userIds
       createdAt
     }
   }
@@ -22,12 +24,23 @@ export const GetSocietyById = gql(`
       id
       name
       shortName
+      imageUrl
+      description
       union {
         id
         name
         shortName
+        imageUrl
       }
+      userIds
       createdAt
+      totalEventLikes
+      eventIds
+      eventImageUrls {
+        id
+        eventId
+        eventImageUrl
+      }
     }
   }
 `);

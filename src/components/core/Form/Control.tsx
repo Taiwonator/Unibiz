@@ -114,7 +114,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         ref={ref as LegacyRef<any>}
         disabled={disabled}
         className={cx(
-          `w-full`,
+          `w-full rounded-sm`,
           status && statusClassNameMap[status],
           type === 'textarea' && 'textarea textarea-bordered',
           type !== 'textarea' && 'input input-bordered',

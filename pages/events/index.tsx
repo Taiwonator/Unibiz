@@ -11,6 +11,7 @@ import {
   EventType,
   GetAllEventsDocument,
   useGetAllEventsQuery,
+  useGetAllSocietiesQuery,
   useGetAllUnionsQuery,
 } from 'generated/graphql';
 import ListItem from '@components/core/ListItem';
@@ -23,6 +24,7 @@ import {
   GetAllEventsQuery,
   GetEventBySocietyId,
   GetEventByUnionId,
+  GetUnverifiedEventsQuery,
 } from 'src/graphql/event/queries.graphql';
 import { useQueryHelpers } from '@hooks/useQueryHelpers';
 import moment from 'moment';
@@ -33,11 +35,16 @@ import useModal from '@hooks/useModal';
 import useUniSelect from '@hooks/useUniSelect';
 import cx from 'classnames';
 import { Tag as RemovableTag } from './create';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useRouter } from 'next/router';
+import { DeleteEventMutation } from 'src/graphql/user/mutations.graphql';
 
 const Events: NextPageWithLayout = () => {
   const { setActiveNavItem } = useNavigation();
   const { isASociety, isAGuest, isAUnion, aGroup } = useApp();
   const [ref, inView] = useInView();
+  const { data: session } = useSession();
+  const { user } = session || {};
 
   useEffect(() => {
     setActiveNavItem('events');
@@ -55,6 +62,17 @@ const Events: NextPageWithLayout = () => {
 
   const [unionsResult] = useGetAllUnionsQuery();
   const { UniSelectComponent, getUnionDomain } = useUniSelect();
+  const [societiesRes] = useGetAllSocietiesQuery({
+    variables: { verified: false },
+  });
+
+  const unverifiedSocieties = useMemo(() => {
+    if (!societiesRes.error) {
+      return societiesRes.data?.Society;
+    } else {
+      return [];
+    }
+  }, [societiesRes.data?.Society, societiesRes.error]);
 
   useEffect(() => {
     const updateEvents = async () => {
@@ -88,23 +106,49 @@ const Events: NextPageWithLayout = () => {
           throw err;
         }
       } else if (isAGuest) {
-        console.log('filter: ', filter.tags.length ? filter.tags : null);
+        let res;
         try {
-          const getAllEventsRes = await client
-            ?.query(GetAllEventsQuery, {
-              societyId,
-              unionId,
-              tags: filter.tags.length ? filter.tags : null,
-            })
-            .toPromise();
-          if (!getAllEventsRes.error) {
-            console.log('guest: ', getAllEventsRes);
-
-            setDisplayedEvents(getAllEventsRes.data.Event);
+          if (unionId === 'unverified') {
+            res = await client?.query(GetUnverifiedEventsQuery).toPromise();
+          } else {
+            res = await client
+              ?.query(GetAllEventsQuery, {
+                societyId,
+                unionId,
+                tags: filter.tags.length ? filter.tags : null,
+              })
+              .toPromise();
+          }
+          if (!res.error) {
+            if (unionId === 'unverified') {
+              setDisplayedEvents(res.data.FindUnverifiedEvents);
+            } else {
+              setDisplayedEvents(res.data.Event);
+            }
           }
         } catch (err) {
           throw err;
         }
+
+        // if (unionId === 'unverified') {
+        // } else {
+        //   try {
+        //     const getAllEventsRes = await client
+        //       ?.query(GetAllEventsQuery, {
+        //         societyId,
+        //         unionId,
+        //         tags: filter.tags.length ? filter.tags : null,
+        //       })
+        //       .toPromise();
+        //     if (!getAllEventsRes.error) {
+        //       console.log('guest: ', getAllEventsRes);
+
+        //       setDisplayedEvents(getAllEventsRes.data.Event);
+        //     }
+        //   } catch (err) {
+        //     throw err;
+        //   }
+        // }
       }
     };
 
@@ -118,20 +162,28 @@ const Events: NextPageWithLayout = () => {
     unionId,
     societyId,
     filter,
+    displayedEvents,
   ]);
 
-  const unions = useMemo(
-    () =>
-      unionsResult?.data?.Union?.map((u: any) => {
-        const { id, name, societies } = u;
-        return {
-          id,
-          name,
-          societies,
-        };
-      }),
-    [unionsResult?.data?.Union]
-  );
+  const unions = useMemo(() => {
+    const realUnions = unionsResult?.data?.Union?.map((u: any) => {
+      const { id, name, societies } = u;
+      return {
+        id,
+        name,
+        societies,
+      };
+    });
+    return realUnions;
+    // return [
+    // ...realUnions,
+    // {
+    //   id: 'unverified',
+    //   name: 'Unverified Universities',
+    //   societies: unverifiedSocieties,
+    // },
+    // ];
+  }, [unionsResult?.data?.Union]);
 
   const handleClearFilter = () => {
     setFilter({ open: false, tags: [] });
@@ -147,6 +199,15 @@ const Events: NextPageWithLayout = () => {
     }
     reset((prev) => ({ ...prev, selectedTag: '' }));
   }, [selectedTag, reset, filter.tags]);
+
+  const getSocietyOptions = () => {
+    return unions
+      ?.find((u) => u.id === watch('union'))
+      ?.societies?.map((s: any) => ({
+        label: s.name,
+        value: s.id,
+      }));
+  };
 
   return (
     <>
@@ -190,12 +251,7 @@ const Events: NextPageWithLayout = () => {
                   <Control
                     type="select"
                     placeholder="Find your society"
-                    options={unions
-                      ?.find((u) => u.id === watch('union'))
-                      ?.societies?.map((s: any) => ({
-                        label: s.name,
-                        value: s.id,
-                      }))}
+                    options={getSocietyOptions()}
                     {...register('society')}
                   />
                 )}
@@ -233,7 +289,7 @@ const Events: NextPageWithLayout = () => {
           <ScrollableArea disabled>
             <EventList
               state={{
-                loading: !displayedEvents?.length,
+                loading: !displayedEvents?.length || !aGroup,
                 searchValue,
               }}
               events={displayedEvents}
@@ -272,13 +328,14 @@ interface EventList {
   state?: {
     loading?: boolean;
     searchValue?: string;
+    unionId?: string;
   };
 }
 
 const EventList: React.FC<EventList> = ({ events, state }) => {
   const [futureEvents, setFutureEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
-  const { isASociety } = useApp();
+  const { isASociety, isAGuest, aGroup } = useApp();
 
   const getPastAndFutureEvents = useMemo(() => {
     return () => [sortFutureEvents(events), sortPastEvents(events)];
@@ -322,9 +379,9 @@ const EventList: React.FC<EventList> = ({ events, state }) => {
         <LoadingElement className="h-80 w-full" />
       ) : (
         <div className="space-y-12">
-          <div className="space-y-4">
+          <div className="space-y-16 md:space-y-4">
             {futureEvents?.map((event: Partial<Event>) => {
-              return <EventComponent key={event?.id} {...event} />;
+              return <EventComponent key={event?.id} {...event} editable />;
             })}
           </div>
           {isASociety && (
@@ -332,7 +389,7 @@ const EventList: React.FC<EventList> = ({ events, state }) => {
               <h3 className="text-lg font-bold md:text-2xl">Past Events</h3>
               <div className="opacity-50">
                 {pastEvents?.map((event: Partial<Event>) => {
-                  return <EventComponent key={event?.id} {...event} />;
+                  return <EventComponent key={event?.id} {...event} editable />;
                 })}
               </div>
             </div>
@@ -343,21 +400,59 @@ const EventList: React.FC<EventList> = ({ events, state }) => {
   );
 };
 
-export const EventComponent: React.FC<Partial<Event>> = ({
+interface EventComponentProps extends Partial<Event> {
+  editable?: boolean;
+}
+
+export const EventComponent: React.FC<EventComponentProps> = ({
   id,
   tags,
   name,
   society,
   thumbnailUrl,
   date,
+  editable,
 }) => {
+  const router = useRouter();
+  const { context, client } = useQueryHelpers();
+  const { dispatchModal, generateProceedOrCancelComponent } = useModal();
+  const { isASociety } = useApp();
+
   const unionName = society?.union
     ? (('     |     ' + society?.union?.shortName) as string)
     : '';
 
+  const handleEditEvent = (id: string) => {
+    router.push(`/events/edit/${id}`);
+  };
+
+  const handleDeleteEvent = (id: string) => {
+    dispatchModal(
+      generateProceedOrCancelComponent({
+        options: {
+          prompt: `Deleting event: ${name}`,
+          action: () => deleteEvent(id),
+        },
+      })
+    );
+  };
+
+  const deleteEvent = async (id: string) => {
+    try {
+      const res = await client
+        ?.mutation(DeleteEventMutation, { eventId: id })
+        .toPromise();
+      if (!res.error) {
+        router.reload();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
-    <div>
-      <NextLink href={`/events/${id}`} target="_blank">
+    <div className="flex flex-col items-start md:flex-row">
+      <NextLink className="w-full" href={`/events/${id}`} target="_blank">
         <ListItem
           labels={{
             topLeft: <Tags tags={tags} />,
@@ -371,6 +466,26 @@ export const EventComponent: React.FC<Partial<Event>> = ({
           }}
         />
       </NextLink>
+      {editable && isASociety && (
+        <div className="flex pt-1">
+          <label
+            tabIndex={0}
+            htmlFor="my-modal"
+            className="p-2 hover:text-positive"
+            onClick={() => {
+              handleEditEvent(id as string);
+            }}
+          >
+            <FaEdit />
+          </label>
+          <button
+            className="p-2 hover:text-red"
+            onClick={() => handleDeleteEvent(id as string)}
+          >
+            <FaTrash />
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -398,7 +513,7 @@ const Tag: React.FC<TagProps> = ({ className, text }) => {
   return (
     <div
       className={cx(
-        'bg-black px-2 py-1 rounded-sm font-bold text-white',
+        'bg-black px-2 py-1 rounded-sm font-bold text-white max-w-10',
         className
       )}
     >

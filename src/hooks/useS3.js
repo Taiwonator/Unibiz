@@ -6,9 +6,12 @@ function useS3() {
     uploadError: null,
   });
 
-  async function uploadToS3(file) {
+  async function uploadToS3(files) {
     const formData = new FormData();
-    formData.append('file', file);
+
+    files.forEach((file) => {
+      formData.append('file', file);
+    });
 
     try {
       const res = await fetch('/api/uploadToS3', {

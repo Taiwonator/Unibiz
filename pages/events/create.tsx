@@ -20,6 +20,20 @@ import useModal from '@hooks/useModal';
 
 type LocationType = 'address' | 'online' | 'tbd';
 
+const FILE_TYPES = ['image/png', 'image/jpeg'];
+
+export const imageSchema = yup
+  .mixed()
+  .required('Please select a file')
+  .test('fileType', 'File must be a PNG or JPEG image', (value: any) => {
+    if (!value || !value[0]) {
+      return false;
+    }
+    const type = value[0].type;
+
+    return FILE_TYPES.includes(type);
+  });
+
 const Create: NextPageWithLayout = () => {
   const { aGroup } = useApp();
   const [tags, setTags] = useState<EventType[]>([]);
@@ -27,19 +41,6 @@ const Create: NextPageWithLayout = () => {
   const { uploadToS3, uploadResponse } = useS3();
   const { context, client } = useQueryHelpers();
   const router = useRouter();
-
-  const FILE_TYPES = ['image/png', 'image/jpeg'];
-  const imageSchema = yup
-    .mixed()
-    .required('Please select a file')
-    .test('fileType', 'File must be a PNG or JPEG image', (value: any) => {
-      if (!value || !value[0]) {
-        return false;
-      }
-      const type = value[0].type;
-
-      return FILE_TYPES.includes(type);
-    });
 
   const schema = yup
     .object()
@@ -105,12 +106,11 @@ const Create: NextPageWithLayout = () => {
   };
 
   const createEvent = async (data: any) => {
-    console.log('data: ', data);
     const tFile = data.thumbmailImage[0];
     const bFile = data.bannerImage[0];
     if (tFile && bFile) {
-      const tRes = await uploadToS3(tFile);
-      const bRes = await uploadToS3(bFile);
+      const tRes = await uploadToS3([tFile]);
+      const bRes = await uploadToS3([bFile]);
       const date = String(setTimeOnDate(data.date, data.time));
 
       if (aGroup) {
@@ -134,17 +134,20 @@ const Create: NextPageWithLayout = () => {
             ?.mutation(CreateEventMutation, variables)
             .toPromise();
 
-          dispatchModal(
-            generateProceedOrCancelComponent({
-              options: {
-                prompt: `Redirecting you to your event :)`,
-                action: () =>
-                  router.push(
-                    `/events/${createEventResult.data.createEvent.id}`
-                  ),
-              },
-            })
-          );
+          console.log(createEventResult);
+          if (!createEventResult.error && createEventResult.data.createEvent) {
+            dispatchModal(
+              generateProceedOrCancelComponent({
+                options: {
+                  prompt: `Redirecting you to your event :)`,
+                  action: () =>
+                    router.push(
+                      `/events/${createEventResult.data.createEvent.id}`
+                    ),
+                },
+              })
+            );
+          }
         } catch (err) {
           throw err;
         }
@@ -157,8 +160,8 @@ const Create: NextPageWithLayout = () => {
       {/* {bannerImage && (
         // <img src={createObjectURL(bannerImage[0])} alt="Preview" />
       )} */}
-      <div className="container-md min-h-screen space-y-8">
-        <form className="space-y-4">
+      <div className="container-md min-h-screen space-y-16">
+        <form className="space-y-8">
           <p className="font-bold md:text-4xl">{name}</p>
           <Control
             placeholder="Worship Night"
@@ -235,7 +238,7 @@ const Create: NextPageWithLayout = () => {
           />
         )}
         <div className="grid grid-flow-row md:space-x-2 md:grid-flow-col">
-          <ControlShell label="Banner Image">
+          <ControlShell label="Banner Image" required>
             <input
               className="file-input file-input-ghost file-input-bordered w-full"
               type="file"
@@ -243,7 +246,7 @@ const Create: NextPageWithLayout = () => {
             />
           </ControlShell>
 
-          <ControlShell label="Thumbnail Image">
+          <ControlShell label="Thumbnail Image" required>
             <input
               className="file-input file-input-ghost file-input-bordered w-full"
               type="file"
