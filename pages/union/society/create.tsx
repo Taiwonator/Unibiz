@@ -197,7 +197,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const unis = await unisRes.json();
 
   const client = initUrqlClient(
-    { url: 'http://localhost:4000/graphql' },
+    { url: process.env.NEXT_PUBLIC_API_ENDPOINT as string },
     false
   );
   const unionQueryResults = await client

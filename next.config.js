@@ -7,6 +7,9 @@ const nextConfig = {
   //   // !! WARN !!
   //   ignoreBuildErrors: true,
   // },
+  env: {
+    API_ENDPOINT: process.env.API_ENDPOINT,
+  },
   async redirects() {
     return [
       {

@@ -60,7 +60,7 @@ const authExchangeFunc = async (utils: any) => {
 
 const client: NextUrqlClientConfig = (ssrExchange, ctx) => {
   return {
-    url: 'http://localhost:4000/graphql',
+    url: process.env.NEXT_PUBLIC_API_ENDPOINT as string,
     exchanges: [
       dedupExchange,
       cacheExchange,

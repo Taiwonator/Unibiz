@@ -473,6 +473,7 @@ export type User = Node & {
   /** Unique identifier for the resource */
   id?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
   societies?: Maybe<Array<Maybe<Society>>>;
   societyRequests?: Maybe<Array<Maybe<Society>>>;
   state?: Maybe<State>;

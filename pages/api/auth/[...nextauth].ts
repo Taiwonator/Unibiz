@@ -36,7 +36,7 @@ export const authOptions: AuthOptions = (req, res) => ({
       credentials: {},
       async authorize(credentials, req) {
         const client = initUrqlClient(
-          { url: 'http://localhost:4000/graphql' },
+          { url: process.env.NEXT_PUBLIC_API_ENDPOINT as string },
           false
         );
         const result = await client
@@ -71,7 +71,7 @@ export const authOptions: AuthOptions = (req, res) => ({
       if (account?.provider === 'google') {
         console.log('User signed in with Google:', user);
         const client = initUrqlClient(
-          { url: 'http://localhost:4000/graphql' },
+          { url: process.env.NEXT_PUBLIC_API_ENDPOINT as string },
           false
         );
         const result = await client
@@ -98,7 +98,7 @@ export const authOptions: AuthOptions = (req, res) => ({
     async jwt({ token, user }) {
       if (user) {
         const client = initUrqlClient(
-          { url: 'http://localhost:4000/graphql' },
+          { url: process.env.NEXT_PUBLIC_API_ENDPOINT as string },
           false
         );
         const result = await client

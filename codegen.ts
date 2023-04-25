@@ -1,9 +1,12 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const config: CodegenConfig = {
   schema: [
     {
-      'http://localhost:4000/graphql': {
+      [process.env.API_ENDPOINT as string]: {
         headers: {
           Authorization: 'Bearer from codegen',
         },
