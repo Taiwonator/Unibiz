@@ -29,8 +29,9 @@ import { useQueryHelpers } from '@hooks/useQueryHelpers';
 import { RequestSocietyFromUserMutation } from 'src/graphql/society/mutations.graphql';
 import cx from 'classnames';
 import { DeleteEventImageUrlMutation } from 'src/graphql/event/mutations.graphql';
+import { NextPageWithLayout } from 'pages/_app';
 
-const Society = () => {
+const Society: NextPageWithLayout = () => {
   const router = useRouter();
   const { sid } = router.query;
   const { dispatchAlert } = useAlert();
@@ -188,20 +189,25 @@ const DetailsComponent: React.FC<DetailsComponentProps> = ({ society }) => {
       {/* <div className="flex flex-col w-full space-y-8 md:flex-row md:space-y-0"> */}
       <div className="carousel carousel-center rounded-box">
         {society?.eventImageUrls.map(
-          ({ eventId, eventImageUrl }: EventImage, i) => (
+          ({ eventId, eventImageUrl }: EventImage, i: number) => (
             <div
               key={i}
               className={cx('relative carousel-item', carouselItemClassName())}
             >
-              <img
-                src={eventImageUrl}
-                alt="Society Event Image"
-                className="w-full object-cover"
-              />
-              {showDeleteButton() && (
+              {eventImageUrl && (
+                <img
+                  src={eventImageUrl}
+                  alt="Society Event Image"
+                  className="w-full object-cover"
+                />
+              )}
+
+              {showDeleteButton() && eventId && (
                 <button
                   className="bg-red text-white absolute right-4 top-4 p-4 rounded-full hover:bg-errordark"
-                  onClick={() => handleImageDelete(eventId, eventImageUrl)}
+                  onClick={() =>
+                    handleImageDelete(eventId, eventImageUrl as string)
+                  }
                 >
                   <FaTrash />
                 </button>

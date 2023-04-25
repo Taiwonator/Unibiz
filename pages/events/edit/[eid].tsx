@@ -18,6 +18,7 @@ import {
 } from 'src/graphql/event/mutations.graphql';
 import {
   CreateEventMutationVariables,
+  EditEventMutationVariables,
   EventType,
   useGetEventByIdQuery,
 } from 'generated/graphql';
@@ -51,7 +52,7 @@ export const optionalImageSchema = yup
 
 const Edit: NextPageWithLayout = () => {
   const { aGroup } = useApp();
-  const [tags, setTags] = useState<EventType[]>([]);
+  const [tags, setTags] = useState<any>([]);
   const [locationType, setLocationType] = useState<LocationType>('address');
   const { uploadToS3, uploadResponse } = useS3();
   const { context, client } = useQueryHelpers();
@@ -118,7 +119,7 @@ const Edit: NextPageWithLayout = () => {
         locationLink: event?.location?.link,
         registerLink: event?.registerLink,
       });
-      setTags(event.tags);
+      setTags(event?.tags);
       event?.location?.type === 'ADDRESS'
         ? setLocationType('address')
         : event?.location?.type === 'ONLINE'
@@ -134,7 +135,7 @@ const Edit: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (!tags.includes(selectedTag) && selectedTag) {
-      setTags((prev) => [...prev, selectedTag]);
+      setTags((prev: any) => [...prev, selectedTag]);
     }
     reset((prev) => ({ ...prev, selectedTag: '' }));
   }, [selectedTag, reset, tags]);
@@ -162,9 +163,13 @@ const Edit: NextPageWithLayout = () => {
     }
     const date = String(setTimeOnDate(data.date, data.time));
 
+    // interface Variables extends EditEventMutationVariables {
+    //   locationType: any;
+    // }
+
     if (aGroup) {
-      const variables: Partial<CreateEventMutationVariables> = {
-        eventId: eid,
+      const variables: any = {
+        eventId: eid as string,
         name: data.name,
         description: data.description,
         thumbnailUrl: tRes?.urls[0],
@@ -173,7 +178,7 @@ const Edit: NextPageWithLayout = () => {
         tags,
         address: data.address,
         locationLink: data.locationLink,
-        locationType: locationType.toUpperCase(),
+        locationType: locationType.toUpperCase() as LocationType,
         registerLink: data.registerLink,
       };
 
@@ -249,11 +254,13 @@ const Edit: NextPageWithLayout = () => {
             {...register('selectedTag')}
           />
           <div className="flex space-x-2">
-            {tags.map((tag) => (
+            {tags.map((tag: any) => (
               <Tag
                 key={tag}
                 text={tag}
-                onClick={() => setTags((prev) => prev.filter((t) => t !== tag))}
+                onClick={() =>
+                  setTags((prev: any) => prev.filter((t: any) => t !== tag))
+                }
               />
             ))}
           </div>

@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
 // Import React FilePond
-import { FilePond, File, registerPlugin } from 'react-filepond';
+import { FilePond, registerPlugin } from 'react-filepond';
 
 // Import FilePond styles
 import 'filepond/dist/filepond.min.css';
@@ -74,7 +74,7 @@ const Dump: NextPageWithLayout = () => {
   const router = useRouter();
   const [pastEvents, setPastEvents] = useState([]);
   const { client } = useQueryHelpers();
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<any>([]);
   const { uploadToS3 } = useS3();
 
   useEffect(() => {
@@ -110,7 +110,7 @@ const Dump: NextPageWithLayout = () => {
   const handleEventSelect = async (id: string) => {
     // router.reload();
     // console.log(files[0].getMetadata());
-    const res = await uploadToS3(files.map((file) => file.file));
+    const res = await uploadToS3(files.map((file: any) => file.file));
     const imageUrls = res.urls;
 
     const addImagesRes = await client
@@ -186,10 +186,10 @@ const Dump: NextPageWithLayout = () => {
       <div className="min-h-[75vh] pb-10">
         <FilePond
           files={files}
-          onupdatefiles={setFiles}
+          onupdatefiles={setFiles as any}
           acceptedFileTypes={['image/*']}
-          allowFileEncode
-          allowImageTransform
+          // allowFileEncode
+          // allowImageTransform
           allowMultiple={true}
           allowImageCrop
           // imageCropAspectRatio={'16:10'}
@@ -200,12 +200,8 @@ const Dump: NextPageWithLayout = () => {
           className="h-full"
         />
         <div className="container-lg flex justify-center">
-          <label
-            htmlFor="my-modal"
-            className="btn bg-black"
-            disabled={!files.length}
-          >
-            Select Event
+          <label htmlFor="my-modal" className="btn bg-black">
+            <button disabled={!files.length as any}>Select Event</button>
           </label>
         </div>
 
@@ -231,7 +227,7 @@ const Dump: NextPageWithLayout = () => {
                       <button
                         key={event.id}
                         className="block w-full text-left"
-                        onClick={() => handleSubmit(event.id)}
+                        onClick={() => handleSubmit(event?.id as string)}
                       >
                         <ListItem
                           labels={{

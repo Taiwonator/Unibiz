@@ -185,14 +185,14 @@ const Faqs: NextPageWithLayout = (props: any) => {
                     htmlFor="my-modal"
                     className="p-2 hover:text-positive"
                     onClick={() => {
-                      handleOpenEditFaq(faq.id);
+                      handleOpenEditFaq(faq.id as string);
                     }}
                   >
                     <FaEdit />
                   </label>
                   <button
                     className="p-2 hover:text-red"
-                    onClick={() => handleDeleteFAQ(faq.id)}
+                    onClick={() => handleDeleteFAQ(faq.id as string)}
                   >
                     <FaTrash />
                   </button>

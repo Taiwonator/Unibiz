@@ -50,7 +50,7 @@ const Events: NextPageWithLayout = () => {
     setActiveNavItem('events');
   }, []);
 
-  const [filter, setFilter] = useState({ open: false, tags: [] });
+  const [filter, setFilter] = useState<any>({ open: false, tags: [] });
   const { client } = useQueryHelpers();
   const [displayedEvents, setDisplayedEvents] = useState<any>([]);
 
@@ -191,11 +191,13 @@ const Events: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    if (selectedTag && !filter.tags.includes(selectedTag)) {
-      setFilter((prev) => ({
-        ...prev,
-        tags: [...prev.tags, selectedTag],
-      }));
+    if (selectedTag) {
+      if (!filter.tags.includes(selectedTag)) {
+        setFilter((prev: any) => ({
+          ...prev,
+          tags: [...prev.tags, selectedTag],
+        }));
+      }
     }
     reset((prev) => ({ ...prev, selectedTag: '' }));
   }, [selectedTag, reset, filter.tags]);
@@ -230,7 +232,9 @@ const Events: NextPageWithLayout = () => {
               {!filter.open && (
                 <button
                   className="btn px-12 bg-black"
-                  onClick={() => setFilter((prev) => ({ ...prev, open: true }))}
+                  onClick={() =>
+                    setFilter((prev: any) => ({ ...prev, open: true }))
+                  }
                 >
                   Filter By
                 </button>
@@ -240,7 +244,7 @@ const Events: NextPageWithLayout = () => {
               <div className="space-y-4">
                 {isAGuest && (
                   <UniSelectComponent
-                    options={unions}
+                    options={unions as any}
                     placeholder="Select a university"
                     uniDomain={getUnionDomain()}
                     {...register('union')}
@@ -268,15 +272,15 @@ const Events: NextPageWithLayout = () => {
                     {...register('selectedTag')}
                   />
                   <div className="flex space-x-2">
-                    {filter?.tags.map((tag) => (
+                    {filter?.tags.map((tag: any) => (
                       <RemovableTag
                         className="bg-positive text-xs"
                         key={tag}
                         text={tag}
                         onClick={() =>
-                          setFilter((prev) => ({
+                          setFilter((prev: any) => ({
                             ...prev,
-                            tags: prev?.tags.filter((t) => t !== tag),
+                            tags: prev?.tags.filter((t: any) => t !== tag),
                           }))
                         }
                       />

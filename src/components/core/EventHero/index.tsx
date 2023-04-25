@@ -60,15 +60,21 @@ const EventHero: React.FC<EventHeroProps> = ({
                 <FaStar className="text-positive" />
               </div>
             )}
-            <button
-              onClick={() =>
-                router.push(`/union/society/${event.society.id}`, undefined, {
-                  shallow: false,
-                })
-              }
-            >
-              {event?.society?.name}
-            </button>
+            {event && (
+              <button
+                onClick={() =>
+                  router.push(
+                    `/union/society/${event.society?.id}`,
+                    undefined,
+                    {
+                      shallow: false,
+                    }
+                  )
+                }
+              >
+                {event?.society?.name}
+              </button>
+            )}
             {hasUnion(event) && (
               <>
                 <p className="text-purple">|</p>

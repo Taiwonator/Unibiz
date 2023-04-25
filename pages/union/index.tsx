@@ -363,7 +363,7 @@ const UnionsComponent: React.FC<any> = ({ useTabState, props }) => {
         <Search placeholder="Search for a union" {...register('search')} />
         <ScrollableArea>
           <div className="space-y-4">
-            {displayedUnions?.map((union) => (
+            {displayedUnions?.map((union: Union) => (
               <ListItem
                 key={union?.name}
                 labels={{
@@ -379,7 +379,7 @@ const UnionsComponent: React.FC<any> = ({ useTabState, props }) => {
                   middleLeft: union?.name as string,
                   bottomLeft: <p className="text-xs">{union?.uni?.name}</p>,
                 }}
-                imageUrl={union?.imageUrl}
+                imageUrl={union?.imageUrl as string}
                 onClick={() => handleClick(union as any)}
               />
             ))}
@@ -433,24 +433,26 @@ const SocietiesComponent: React.FC<any> = ({ props }) => {
                     href={`/union/society/${society.id}`}
                     target="_blank"
                   >
-                    <ListItem
-                      labels={{
-                        topLeft: (
-                          <div
-                            className={cx(
-                              'inline-flex bg-black px-2 py-1 rounded-sm font-bold text-white'
-                            )}
-                          >
-                            {society?.shortName as string}
-                          </div>
-                        ),
-                        middleLeft: society?.name as string,
-                        bottomLeft: `Created ${retrieveDays(
-                          society?.createdAt as string
-                        )}`,
-                      }}
-                      imageUrl={society?.imageUrl}
-                    />
+                    {society && (
+                      <ListItem
+                        labels={{
+                          topLeft: (
+                            <div
+                              className={cx(
+                                'inline-flex bg-black px-2 py-1 rounded-sm font-bold text-white'
+                              )}
+                            >
+                              {society?.shortName as string}
+                            </div>
+                          ),
+                          middleLeft: society?.name as string,
+                          bottomLeft: `Created ${retrieveDays(
+                            society?.createdAt as string
+                          )}`,
+                        }}
+                        imageUrl={society.imageUrl as string}
+                      />
+                    )}
                   </NextLink>
                 </div>
               ))
@@ -520,7 +522,7 @@ export const Accordian: React.FC<AccrodianProps> = ({
   className,
 }) => {
   return (
-    <div tabIndex="0" className={cx('collapse collapse-arrow', className)}>
+    <div tabIndex={0} className={cx('collapse collapse-arrow', className)}>
       <div className="collapse-title font-extrabold inline-flex gap-2 items-center hover:text-positive focus:text-positive">
         <FaInfoCircle />
         {question}

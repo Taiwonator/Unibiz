@@ -185,7 +185,11 @@ const Create: NextPageWithLayout = (props: any) => {
 // Image Url
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
+  const session = (await getServerSession(
+    context.req as any,
+    context.res as any,
+    authOptions as any
+  )) as any;
 
   const unisRes = await fetch(
     'http://universities.hipolabs.com/search?country=United%20Kingdom'

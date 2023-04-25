@@ -119,7 +119,11 @@ export default function SignIn({
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
+  const session = (await getServerSession(
+    context.req as any,
+    context.res as any,
+    authOptions as any
+  )) as any;
 
   // If the user is already logged in, redirect.
   // Note: Make sure not to redirect to the same page

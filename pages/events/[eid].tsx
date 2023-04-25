@@ -137,7 +137,7 @@ const Event: NextPageWithLayout = () => {
   return (
     <div className="pb-16">
       <EventHero
-        event={data?.FindEventById}
+        event={data?.FindEventById as Event}
         liked={liked}
         onLiked={() => handleLiked()}
       />
@@ -152,7 +152,7 @@ const Event: NextPageWithLayout = () => {
                 label: 'Details',
                 Component: (
                   <DetailsComponent
-                    event={data?.FindEventById}
+                    event={data?.FindEventById as Event}
                     liked={liked}
                     onLiked={() => handleLiked()}
                   />
@@ -259,11 +259,14 @@ const DetailsComponent: React.FC<DetailsComponentProps> = ({
             </p>
           }
         />
-        <Detail
-          label="Time"
-          Icon={<RxCalendar className="text-positive" />}
-          Value={<p className="text-xl">{formatTimestamp(date)}</p>}
-        />
+        {date && (
+          <Detail
+            label="Time"
+            Icon={<RxCalendar className="text-positive" />}
+            Value={<p className="text-xl">{formatTimestamp(date)}</p>}
+          />
+        )}
+
         <Detail
           label="Share Link"
           Icon={<RxShare1 />}
@@ -329,7 +332,7 @@ const DetailsComponent: React.FC<DetailsComponentProps> = ({
                     alt="Event Carousel"
                     loading="eager"
                   />
-                  {showDeleteButton() && (
+                  {showDeleteButton() && imageUrl && (
                     <button
                       className="bg-red text-white absolute right-4 top-4 p-4 rounded-full hover:bg-errordark"
                       onClick={() => handleImageDelete(imageUrl)}
