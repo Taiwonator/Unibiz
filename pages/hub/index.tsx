@@ -34,6 +34,7 @@ import useS3 from '@hooks/useS3';
 import { EditSocietyMutation } from 'src/graphql/society/mutations.graphql';
 import { useRouter } from 'next/router';
 import { EditUnionMutation } from 'src/graphql/union/mutations.graphql';
+import useAlert from '@hooks/useAlert';
 
 const Hub: NextPageWithLayout = (props: any) => {
   const { unions } = props;
@@ -65,6 +66,7 @@ const Hub: NextPageWithLayout = (props: any) => {
   });
 
   useConfirmNavigation({ condition: isDirty && !isSubmitted });
+  const { dispatchAlert } = useAlert();
 
   useEffect(() => {
     setActiveNavItem('hub');
@@ -159,7 +161,14 @@ const Hub: NextPageWithLayout = (props: any) => {
     const file = data.image?.[0];
     let res;
     if (file) {
-      res = await uploadToS3([file]);
+      try {
+        res = await uploadToS3([file]);
+      } catch (err) {
+        dispatchAlert({
+          text: 'An error has occured',
+          type: 'error',
+        });
+      }
     }
 
     // update text fields
@@ -341,7 +350,10 @@ const Hub: NextPageWithLayout = (props: any) => {
               )} */}
             </>
           )}
-          <ControlShell label="Image">
+          <ControlShell
+            label="Image"
+            labels={{ bottomLeft: 'Must be less than 4MB' }}
+          >
             <input
               className="file-input file-input-ghost file-input-bordered w-full"
               type="file"

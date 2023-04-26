@@ -52,6 +52,8 @@ import {
 import Image from 'next/image';
 import useModal from '@hooks/useModal';
 import useNavigation from '@hooks/useNavigation';
+import makeUrl, { TCalendarEvent } from 'add-event-to-calendar';
+import moment from 'moment';
 
 const Event: NextPageWithLayout = () => {
   const router = useRouter();
@@ -241,6 +243,32 @@ const DetailsComponent: React.FC<DetailsComponentProps> = ({
     }
   };
 
+  const addEventToCalendar = () => {
+    if (event) {
+      const locationType = event.location?.type;
+      const eventDetails: TCalendarEvent = {
+        name: String(event.name),
+        location: String(
+          locationType === 'ADDRESS'
+            ? event.location?.address
+            : locationType === 'ONLINE'
+            ? event.location?.link
+            : 'TBC'
+        ),
+        details: String(
+          event.description +
+            (locationType === 'ONLINE'
+              ? ` meeting link: ${location?.link}`
+              : '')
+        ),
+        startsAt: String(moment(Number(event.date)).toDate()),
+        endsAt: String(moment(Number(event.date)).toDate()),
+      };
+      const eventUrls = makeUrl(eventDetails);
+      router.push(eventUrls.outlook);
+    }
+  };
+
   return (
     <div className="space-y-8 md:flex">
       <div className="space-y-8 md:mt-12 md:flex-1">
@@ -262,7 +290,11 @@ const DetailsComponent: React.FC<DetailsComponentProps> = ({
         {date && (
           <Detail
             label="Time"
-            Icon={<RxCalendar className="text-positive" />}
+            Icon={
+              <button onClick={() => addEventToCalendar()}>
+                <RxCalendar className="text-positive" />
+              </button>
+            }
             Value={<p className="text-xl">{formatTimestamp(date)}</p>}
           />
         )}

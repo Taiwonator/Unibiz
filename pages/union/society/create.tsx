@@ -156,7 +156,10 @@ const Create: NextPageWithLayout = (props: any) => {
               {...register('union')}
             /> */}
 
-            <ControlShell label="Image">
+            <ControlShell
+              label="Image"
+              labels={{ bottomLeft: 'Must be less than 4MB' }}
+            >
               <input
                 className="file-input file-input-ghost file-input-bordered w-full"
                 type="file"

@@ -3922,6 +3922,11 @@ acorn@^8.4.1, acorn@^8.5.0, acorn@^8.7.1, acorn@^8.8.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.8.1.tgz#0a3f9cbecc4ec3bea6f0a80b66ae8dd2da250b73"
   integrity sha512-7zFpHzhnqYKrkYdUjF1HI1bzd0VygEGX8lFk4k5zVMqHEoES+P+7TKI+EvLO9WVMJ8eekdO0aDEK044xTXwPPA==
 
+add-event-to-calendar@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/add-event-to-calendar/-/add-event-to-calendar-1.0.7.tgz#e37ec7e2034b2461c5e374b93d5a7a9ba95fa05e"
+  integrity sha512-XadkJJ48WnBq56/oG2kxJCCmj3T1fQFBvBvDkTykMzfQak/0zqbgN6hx29pPN4t+u7hJqXPstfEujksgl+q5GQ==
+
 address@^1.0.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/address/-/address-1.2.2.tgz#2b5248dac5485a6390532c6a517fda2e3faac89e"

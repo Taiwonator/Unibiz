@@ -17,6 +17,7 @@ import { CreateEventMutationVariables, EventType } from 'generated/graphql';
 import { argsToArgsConfig } from 'graphql/type/definition';
 import { useRouter } from 'next/router';
 import useModal from '@hooks/useModal';
+import useAlert from '@hooks/useAlert';
 
 type LocationType = 'address' | 'online' | 'tbd';
 
@@ -81,6 +82,7 @@ const Create: NextPageWithLayout = () => {
   });
 
   const { dispatchModal, generateProceedOrCancelComponent } = useModal();
+  const { dispatchAlert } = useAlert();
 
   const name = watch('name');
   const selectedTag = watch('selectedTag');
@@ -149,6 +151,10 @@ const Create: NextPageWithLayout = () => {
             );
           }
         } catch (err) {
+          dispatchAlert({
+            text: 'An error has occured',
+            type: 'error',
+          });
           throw err;
         }
       }
@@ -238,7 +244,11 @@ const Create: NextPageWithLayout = () => {
           />
         )}
         <div className="grid grid-flow-row md:space-x-2 md:grid-flow-col">
-          <ControlShell label="Banner Image" required>
+          <ControlShell
+            label="Banner Image"
+            labels={{ bottomLeft: 'Must be less than 4MB' }}
+            required
+          >
             <input
               className="file-input file-input-ghost file-input-bordered w-full"
               type="file"
@@ -246,7 +256,11 @@ const Create: NextPageWithLayout = () => {
             />
           </ControlShell>
 
-          <ControlShell label="Thumbnail Image" required>
+          <ControlShell
+            label="Thumbnail Image"
+            labels={{ bottomLeft: 'Must be less than 4MB' }}
+            required
+          >
             <input
               className="file-input file-input-ghost file-input-bordered w-full"
               type="file"

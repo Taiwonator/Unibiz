@@ -32,6 +32,7 @@ import { useRouter } from 'next/router';
 import { formatDateAndTime } from '@lib/date-formatter';
 import Image from 'next/image';
 import useModal from '@hooks/useModal';
+import useAlert from '@hooks/useAlert';
 
 type LocationType = 'address' | 'online' | 'tbd';
 
@@ -90,6 +91,7 @@ const Edit: NextPageWithLayout = () => {
   });
 
   const { dispatchModal, generateProceedOrCancelComponent } = useModal();
+  const { dispatchAlert } = useAlert();
 
   const router = useRouter();
   const { eid } = router.query;
@@ -155,11 +157,18 @@ const Edit: NextPageWithLayout = () => {
     const tFile = data.thumbmailImage?.[0];
     const bFile = data.bannerImage?.[0];
     let tRes, bRes;
-    if (tFile) {
-      tRes = await uploadToS3([tFile]);
-    }
-    if (bFile) {
-      bRes = await uploadToS3([bFile]);
+    try {
+      if (tFile) {
+        tRes = await uploadToS3([tFile]);
+      }
+      if (bFile) {
+        bRes = await uploadToS3([bFile]);
+      }
+    } catch (err) {
+      dispatchAlert({
+        text: 'An error has occured',
+        type: 'error',
+      });
     }
     const date = String(setTimeOnDate(data.date, data.time));
 
@@ -198,6 +207,10 @@ const Edit: NextPageWithLayout = () => {
         // );
         router.push(`/events/${editEventResult.data.editEvent.id}`);
       } catch (err) {
+        dispatchAlert({
+          text: 'An error has occured',
+          type: 'error',
+        });
         throw err;
       }
     }
@@ -308,7 +321,10 @@ const Edit: NextPageWithLayout = () => {
           />
         )}
         <div className="grid grid-flow-row md:space-x-2 md:grid-flow-col">
-          <ControlShell label="New Banner Image">
+          <ControlShell
+            label="New Banner Image"
+            labels={{ bottomLeft: 'Must be less than 4MB' }}
+          >
             <input
               className="file-input file-input-ghost file-input-bordered w-full"
               type="file"
@@ -316,7 +332,10 @@ const Edit: NextPageWithLayout = () => {
             />
           </ControlShell>
 
-          <ControlShell label="New Thumbnail Image">
+          <ControlShell
+            label="New Thumbnail Image"
+            labels={{ bottomLeft: 'Must be less than 4MB' }}
+          >
             <input
               className="file-input file-input-ghost file-input-bordered w-full"
               type="file"

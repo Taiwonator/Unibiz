@@ -196,13 +196,15 @@ const Dump: NextPageWithLayout = () => {
           maxFiles={4}
           storeAsFile
           name="files"
-          labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+          labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>. Images must be below 4MB'
           className="h-full"
         />
         <div className="container-lg flex justify-center">
-          <label htmlFor="my-modal" className="btn bg-black">
-            <button disabled={!files.length as any}>Select Event</button>
-          </label>
+          <button disabled={!files.length as any}>
+            <label htmlFor="my-modal" className="btn bg-black">
+              Select Event
+            </label>
+          </button>
         </div>
 
         <input type="checkbox" id="my-modal" className="modal-toggle" />
