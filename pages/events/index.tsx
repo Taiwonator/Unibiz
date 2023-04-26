@@ -466,7 +466,7 @@ export const EventComponent: React.FC<EventComponentProps> = ({
           }}
           imageUrl={thumbnailUrl as string}
           uni={{
-            name: society?.shortName + unionName,
+            name: society ? society?.shortName + unionName : 'Deleted Society',
             verified: !!society?.union,
           }}
         />

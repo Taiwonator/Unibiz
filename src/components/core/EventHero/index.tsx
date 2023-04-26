@@ -3,7 +3,13 @@ import cx from 'classnames';
 import { Event } from 'generated/graphql';
 import moment from 'moment';
 import Image from 'next/image';
-import { FaCertificate, FaEdit, FaHeart, FaStar } from 'react-icons/fa';
+import {
+  FaArchive,
+  FaCertificate,
+  FaEdit,
+  FaHeart,
+  FaStar,
+} from 'react-icons/fa';
 import { RxHeart, RxHeartFilled } from 'react-icons/rx';
 import NextLink from 'next/link';
 import useApp from '@hooks/useApp';
@@ -29,7 +35,7 @@ const EventHero: React.FC<EventHeroProps> = ({
 
   const { name, society, bannerUrl, date, registerLink, likes } = event;
   console.log(likes);
-  const hasUnion = (event: any) => !!event.society.union;
+  const hasUnion = (event: any) => !!event.society?.union;
 
   return (
     <div className={cx('grid relative min-h-[320px]', className)}>
@@ -75,11 +81,16 @@ const EventHero: React.FC<EventHeroProps> = ({
                 {event?.society?.name}
               </button>
             )}
-            {hasUnion(event) && (
+            {hasUnion(event) ? (
               <>
                 <p className="text-purple">|</p>
                 <h3>{event?.society?.union?.shortName}</h3>
               </>
+            ) : (
+              <span className="inline-flex items-center gap-2">
+                <FaArchive className="text-red" />
+                Archived Society :/
+              </span>
             )}
           </div>
 

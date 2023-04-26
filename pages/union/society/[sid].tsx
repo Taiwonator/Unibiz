@@ -53,7 +53,6 @@ const Society: NextPageWithLayout = () => {
       </LoadingScreen>
     );
 
-  // return <p>Society: {data?.FindSocietyById?.name}</p>
   return (
     <div className="pb-16">
       <div className="relative min-h-[320px] w-screen flex justify-center items-center">
@@ -170,9 +169,9 @@ const DetailsComponent: React.FC<DetailsComponentProps> = ({ society }) => {
   return (
     <div className="space-y-16 mt-16">
       <div className="space-y-4">
-        {society.union && (
+        {society?.union && (
           <div className="inline-flex bg-black px-2 py-1 rounded-sm font-bold text-white">
-            {society.union.shortName}
+            {society?.union.shortName}
           </div>
         )}
         <h2 className="text-2xl flex items-center space-x-2">
