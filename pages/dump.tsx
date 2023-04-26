@@ -23,6 +23,7 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
 import FilePondPluginImageEdit from 'filepond-plugin-image-edit';
 import FilePondPluginImageResize from 'filepond-plugin-image-resize';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import useModal from '@hooks/useModal';
@@ -50,7 +51,8 @@ registerPlugin(
   FilePondPluginImagePreview,
   FilePondPluginImageCrop,
   FilePondPluginImageEdit,
-  FilePondPluginImageResize
+  FilePondPluginImageResize,
+  FilePondPluginFileValidateSize
 );
 
 const Dump: NextPageWithLayout = () => {
@@ -193,17 +195,21 @@ const Dump: NextPageWithLayout = () => {
           allowMultiple={true}
           allowImageCrop
           // imageCropAspectRatio={'16:10'}
-          maxFiles={4}
+          // maxFiles={4}
+          maxFileSize={'4MB'}
           storeAsFile
           name="files"
           labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>. Images must be below 4MB'
           className="h-full"
         />
         <div className="container-lg flex justify-center">
-          <button disabled={!files.length as any}>
-            <label htmlFor="my-modal" className="btn bg-black">
-              Select Event
-            </label>
+          <button
+            disabled={!files.length as any}
+            className={
+              !files.length ? 'btn btn-disabled bg-grey3' : 'btn bg-black'
+            }
+          >
+            <label htmlFor="my-modal">Select Event</label>
           </button>
         </div>
 
