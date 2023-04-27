@@ -3,7 +3,7 @@ import moment from 'moment';
 export function formatTimestamp(timestamp: string) {
   const date = moment(Number(timestamp));
   const day = date.format('Do');
-  const dateString = `${day} ${date.format('MMM')} @ ${date.format('hA')}`;
+  const dateString = `${day} ${date.format('MMM')} @ ${date.format('h:mmA')}`;
   return dateString;
 }
 

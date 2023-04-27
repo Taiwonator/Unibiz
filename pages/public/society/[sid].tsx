@@ -8,7 +8,7 @@ import {
   useGetSocietyByIdQuery,
 } from 'generated/graphql';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import NextLink from 'next/link';
 import ScrollableArea from '@components/core/ScrollableArea';
 import SocietyAdminLayout from '@components/layout/SocietyAdminLayout';
@@ -21,7 +21,7 @@ import {
   LoadingScreen,
   LoadingSpinner,
 } from '@components/primitive/Loading';
-import { Tags } from 'pages/events';
+import { sortFutureEvents, sortPastEvents, Tags } from 'pages/events';
 import { RxCheck } from 'react-icons/rx';
 import { useSession } from 'next-auth/react';
 import useModal from '@hooks/useModal';
@@ -46,6 +46,10 @@ const Society: NextPageWithLayout = () => {
 
   const society = data?.FindSocietyById;
   const events = allEventsResult?.data?.Event;
+
+  const getPastAndFutureEvents = useMemo(() => {
+    return () => [sortFutureEvents(events), sortPastEvents(events)];
+  }, [events]);
 
   if (fetching)
     return (
@@ -92,7 +96,14 @@ const Society: NextPageWithLayout = () => {
               {
                 id: 'events',
                 label: 'Events',
-                Component: <EventsComponent events={events} />,
+                Component: (
+                  <EventsComponent
+                    events={[
+                      ...(getPastAndFutureEvents()[0] || []),
+                      ...(getPastAndFutureEvents()[1] || []),
+                    ]}
+                  />
+                ),
               },
             ],
           }}

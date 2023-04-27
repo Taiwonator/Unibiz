@@ -3,51 +3,43 @@ import moment from 'moment';
 export const retrieveDays = (timestamp: string): string => {
   const date = moment(Number(timestamp));
   const today = moment().startOf('day');
-  const diffInDays = date.diff(today, 'days');
+  const diffInDays = date.diff(today, 'days', true);
+  const diffInWeeks = date.diff(today, 'weeks', true);
+  const diffInMonths = date.diff(today, 'months', true);
 
-  if (diffInDays === 0) {
+  if (diffInDays <= 1 && diffInDays >= 0) {
     return 'Today';
   }
 
-  const daysString =
-    diffInDays > 0
-      ? `${diffInDays} ${diffInDays === 1 ? 'day' : 'days'} to go`
-      : `${-diffInDays} ${diffInDays === 1 ? 'day' : 'days'} ago`;
-  return daysString;
+  console.log(diffInDays);
+
+  const absDiffInDays = Math.abs(Math.floor(diffInDays));
+  const absDiffInWeeks = Math.abs(Math.floor(diffInWeeks));
+  const absDiffInMonths = Math.abs(Math.floor(diffInMonths));
+
+  if (diffInDays < 0) {
+    if (absDiffInDays < 7) {
+      return `${absDiffInDays} ${absDiffInDays <= 1 ? 'day' : 'days'} ago`;
+    } else if (absDiffInDays < 31) {
+      return `${absDiffInWeeks} ${absDiffInWeeks <= 1 ? 'week' : 'weeks'} ago`;
+    } else {
+      return `${absDiffInMonths} ${
+        absDiffInMonths <= 1 ? 'month' : 'months'
+      } ago`;
+    }
+  } else {
+    if (diffInDays < 7) {
+      return `${Math.floor(diffInDays)} ${
+        Math.floor(diffInDays) <= 1 ? 'day' : 'days'
+      } to go`;
+    } else if (diffInDays < 31) {
+      return `${Math.floor(diffInWeeks)} ${
+        Math.floor(diffInWeeks) <= 1 ? 'week' : 'weeks'
+      } to go`;
+    } else {
+      return `${Math.floor(diffInMonths)} ${
+        Math.floor(diffInMonths) <= 1 ? 'month' : 'months'
+      } to go`;
+    }
+  }
 };
-
-// import moment from 'moment';
-
-// export const retrieveDays = (timestamp: string): string => {
-//   const date = moment(Number(timestamp));
-//   const today = moment().endOf('day');
-//   const diffInHours = today.diff(date, 'hours');
-//   const diffInDays = today.diff(date, 'days');
-//   const diffInWeeks = today.diff(date, 'weeks');
-//   const diffInMonths = today.diff(date, 'months');
-//   const diffInYears = today.diff(date, 'years');
-
-//   if (diffInHours < 24) {
-//     return `Today`;
-//   } else if (diffInDays < 7) {
-//     return `${diffInDays} ${diffInDays === 1 ? 'day' : 'days'} ago`;
-//   } else if (diffInWeeks < 4) {
-//     const weeksString =
-//       diffInWeeks > 0
-//         ? `${diffInWeeks} ${diffInWeeks === 1 ? 'week' : 'weeks'} to go`
-//         : `${-diffInWeeks} ${-diffInWeeks === 1 ? 'week' : 'weeks'} ago`;
-//     return weeksString;
-//   } else if (diffInMonths < 12) {
-//     const monthsString =
-//       diffInMonths > 0
-//         ? `${diffInMonths} ${diffInMonths === 1 ? 'month' : 'months'} to go`
-//         : `${-diffInMonths} ${-diffInMonths === 1 ? 'month' : 'months'} ago`;
-//     return monthsString;
-//   } else {
-//     const yearsString =
-//       diffInYears > 0
-//         ? `${diffInYears} ${diffInYears === 1 ? 'year' : 'years'} to go`
-//         : `${-diffInYears} ${-diffInYears === 1 ? 'year' : 'years'} ago`;
-//     return yearsString;
-//   }
-// };

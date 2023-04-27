@@ -599,7 +599,7 @@ Events.getLayout = (page) => <SocietyAdminLayout>{page}</SocietyAdminLayout>;
 
 export default Events;
 
-const sortFutureEvents = (events: any) => {
+export const sortFutureEvents = (events: any) => {
   if (events) {
     const todayTimestamp = moment().startOf('day').valueOf();
     const futureEvents = events.filter(
@@ -609,7 +609,7 @@ const sortFutureEvents = (events: any) => {
   }
 };
 
-const sortPastEvents = (events: any) => {
+export const sortPastEvents = (events: any) => {
   if (events) {
     const todayTimestamp = moment().startOf('day').valueOf();
     const pastEvents = events.filter(
