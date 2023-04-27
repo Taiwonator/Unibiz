@@ -142,6 +142,7 @@ const Event: NextPageWithLayout = () => {
       <EventHero
         event={data?.FindEventById as Event}
         liked={liked}
+        isPublic
         onLiked={() => handleLiked()}
       />
 

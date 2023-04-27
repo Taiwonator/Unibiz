@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 interface EventHeroProps {
   className?: string;
   event?: Partial<Event>;
+  isPublic?: boolean;
   liked: boolean;
   onLiked: () => void;
 }
@@ -25,6 +26,7 @@ interface EventHeroProps {
 const EventHero: React.FC<EventHeroProps> = ({
   className,
   event,
+  isPublic,
   liked,
   onLiked,
 }) => {
@@ -67,19 +69,16 @@ const EventHero: React.FC<EventHeroProps> = ({
               </div>
             )}
             {event && event.society ? (
-              <button
-                onClick={() =>
-                  router.push(
-                    `/union/society/${event.society?.id}`,
-                    undefined,
-                    {
-                      shallow: false,
-                    }
-                  )
+              <NextLink
+                shallow={false}
+                href={
+                  isPublic
+                    ? `/public/society/${event.society?.id}`
+                    : `/union/society/${event.society?.id}`
                 }
               >
                 {event?.society?.name}
-              </button>
+              </NextLink>
             ) : (
               <span className="inline-flex items-center gap-2">
                 <FaArchive className="text-red" />

@@ -30,6 +30,7 @@ import { RequestSocietyFromUserMutation } from 'src/graphql/society/mutations.gr
 import cx from 'classnames';
 import { DeleteEventImageUrlMutation } from 'src/graphql/event/mutations.graphql';
 import { NextPageWithLayout } from 'pages/_app';
+import PublicLayout from '@components/layout/PublicLayout';
 
 const Society: NextPageWithLayout = () => {
   const router = useRouter();
@@ -232,7 +233,7 @@ const EventsComponent: React.FC<EventsComponentProps> = ({ events }) => {
         <div className="space-y-4">
           {events?.map((event: any) => (
             <div key={event?.id}>
-              <NextLink href={`/events/${event?.id}`} target="_blank">
+              <NextLink href={`/public/events/${event?.id}`} target="_blank">
                 <ListItem
                   labels={{
                     topLeft: <Tags tags={event.tags} />,
@@ -254,9 +255,7 @@ const EventsComponent: React.FC<EventsComponentProps> = ({ events }) => {
   );
 };
 
-Society.getLayout = (page: any) => (
-  <SocietyAdminLayout>{page}</SocietyAdminLayout>
-);
+Society.getLayout = (page: any) => <PublicLayout>{page}</PublicLayout>;
 
 export default Society;
 
