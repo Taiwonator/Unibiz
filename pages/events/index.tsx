@@ -36,9 +36,18 @@ import useModal from '@hooks/useModal';
 import useUniSelect from '@hooks/useUniSelect';
 import cx from 'classnames';
 import { Tag as RemovableTag } from './create';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import {
+  FaAccessibleIcon,
+  FaEdit,
+  FaMagic,
+  FaStar,
+  FaThumbsUp,
+  FaTrash,
+} from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { DeleteEventMutation } from 'src/graphql/user/mutations.graphql';
+import { RecommendEventMutation } from 'src/graphql/event/mutations.graphql';
+import { GetUserByIdQuery } from 'src/graphql/user/queries.graphql';
 
 const Events: NextPageWithLayout = () => {
   const { setActiveNavItem } = useNavigation();
@@ -46,10 +55,6 @@ const Events: NextPageWithLayout = () => {
   const [ref, inView] = useInView();
   const { data: session } = useSession();
   const { user } = session || {};
-
-  useEffect(() => {
-    setActiveNavItem('events');
-  }, []);
 
   const [filter, setFilter] = useState<any>({ open: false, tags: [] });
   const { client } = useQueryHelpers();
@@ -63,9 +68,94 @@ const Events: NextPageWithLayout = () => {
 
   const [unionsResult] = useGetAllUnionsQuery();
   const { UniSelectComponent, getUnionDomain } = useUniSelect();
+
+  const [recommendedEvents, setRecommendedEvents] = useState<Event[] | null>(
+    null
+  );
+  const [recomendationChecked, setRecomendationChecked] = useState(false);
+  const { dispatchModal } = useModal();
+
   const [societiesRes] = useGetAllSocietiesQuery({
     variables: { verified: false },
   });
+
+  useEffect(() => {
+    setActiveNavItem('events');
+  }, []);
+
+  useEffect(() => {
+    // Find recomendations
+    const getRecommendations = async () => {
+      if (user) {
+        const userRes = await client
+          ?.query(GetUserByIdQuery, { id: user.id })
+          .toPromise();
+        console.log(userRes);
+
+        if (!userRes.error && userRes.data) {
+          const eventsRes = await client
+            ?.mutation(RecommendEventMutation, {
+              likedEventIds: userRes.data.FindUserById.interestedEventIds,
+            })
+            .toPromise();
+          console.log(eventsRes);
+          if (!eventsRes.error && eventsRes.data) {
+            if (!!eventsRes.data.RecommendEvent.length) {
+              setRecommendedEvents(eventsRes.data.RecommendEvent);
+            }
+          }
+        }
+      }
+    };
+    getRecommendations();
+  }, [user]);
+
+  const handleRecommendButtonClick = () => {
+    setRecomendationChecked(true);
+    if (recommendedEvents) {
+      dispatchModal(
+        <div className="space-y-4">
+          <h3 className="text-lg font-bold uppercase inline-flex items-center gap-2">
+            Magic Suggestions
+            <FaMagic className="text-black" />
+          </h3>
+          <ScrollableArea className="w-full" disabled>
+            <div className="space-y-2">
+              {recommendedEvents.map((event: Partial<Event>, i: number) => (
+                <NextLink
+                  key={event.id}
+                  className="block w-full text-left"
+                  href={`/events/${event.id}`}
+                >
+                  <ListItem
+                    labels={{
+                      middleLeft: (
+                        <p className="inline-flex gap-2 items-center">
+                          <span className="font-bold">#{i + 1}</span>{' '}
+                          {event.name}
+                          {i === 0 && (
+                            <div className="tooltip" data-tip="Best Guess">
+                              <FaThumbsUp className="text-positive" />
+                            </div>
+                          )}
+                        </p>
+                      ),
+                      bottomLeft: (
+                        <p className="text-left text-xs border border-black text-black px-2 py-1 inline-flex">{`${retrieveDays(
+                          event?.date as string
+                        )}`}</p>
+                      ),
+                    }}
+                    imageUrl={event.thumbnailUrl as string}
+                  />
+                </NextLink>
+              ))}
+            </div>
+          </ScrollableArea>
+        </div>
+      );
+    }
+  };
 
   const unverifiedSocieties = useMemo(() => {
     if (!societiesRes.error) {
@@ -172,29 +262,41 @@ const Events: NextPageWithLayout = () => {
       <div className="bg-grey0 py-10 pt-16">
         <div className="relative container-lg min-h-[80vh] space-y-8">
           <div className="space-y-4">
-            <div className="flex space-x-2">
-              <Search
-                placeholder="Seach for event..."
-                {...register('search')}
-              />
-              {filter.open && (
-                <button
-                  className="btn px-12 bg-black"
-                  onClick={() => handleClearFilter()}
-                >
-                  Clear Filter
-                </button>
-              )}
-              {!filter.open && (
-                <button
-                  className="btn px-12 bg-black"
-                  onClick={() =>
-                    setFilter((prev: any) => ({ ...prev, open: true }))
-                  }
-                >
-                  Filter By
-                </button>
-              )}
+            <div className="space-y-2 md:flex md:items-center md:space-x-2 md:space-y-0">
+              <div className="flex space-x-2 md:flex-1">
+                <Search
+                  placeholder="Seach for event..."
+                  {...register('search')}
+                />
+                {filter.open && (
+                  <button
+                    className="btn px-12 bg-black"
+                    onClick={() => handleClearFilter()}
+                  >
+                    Clear Filter
+                  </button>
+                )}
+                {!filter.open && (
+                  <button
+                    className="btn px-12 bg-black"
+                    onClick={() =>
+                      setFilter((prev: any) => ({ ...prev, open: true }))
+                    }
+                  >
+                    Filter By
+                  </button>
+                )}
+              </div>
+              <button
+                onClick={handleRecommendButtonClick}
+                className={cx(
+                  'btn bg-grey3 w-full md:w-[unset]',
+                  recommendedEvents?.length &&
+                    (recomendationChecked ? '!bg-black' : 'rainbow')
+                )}
+              >
+                <FaMagic />
+              </button>
             </div>
             {filter.open && (
               <div className="space-y-4">
@@ -488,19 +590,6 @@ const Tag: React.FC<TagProps> = ({ className, text }) => {
     </div>
   );
 };
-
-// Create a function that returns the past and future events
-
-// const recommendedEvents = []
-// const setRecommendedEvents = (events: any) => {
-//   if(events) {
-//     const todayTimestamp = moment().startOf('day').valueOf();
-//     const futureEvents = events.filter((event: any) => Number(event.date) >= todayTimestamp);
-//     const sortedFutureEvents = futureEvents.sort((a: any, b: any) => a.date - b.date);
-//     const recommendedEvents = sortedFutureEvents.slice(0, 3);
-//     return recommendedEvents;
-//   }
-// }
 
 Events.getLayout = (page) => <SocietyAdminLayout>{page}</SocietyAdminLayout>;
 

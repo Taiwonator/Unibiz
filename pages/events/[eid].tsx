@@ -57,6 +57,7 @@ import useModal from '@hooks/useModal';
 import useNavigation from '@hooks/useNavigation';
 import makeUrl, { TCalendarEvent } from 'add-event-to-calendar';
 import moment from 'moment';
+import { useSession } from 'next-auth/react';
 
 const Event: NextPageWithLayout = () => {
   const router = useRouter();
@@ -66,6 +67,8 @@ const Event: NextPageWithLayout = () => {
   const { eid } = router.query;
   const [activeTab, setActiveTab] = useState('details');
   const [liked, setLiked] = useState<boolean>(false);
+  const { data: session } = useSession();
+  const { user } = session || {};
 
   const [result] = useGetEventByIdQuery({ variables: { id: eid as string } });
   const { data, fetching, error } = result;
@@ -84,11 +87,12 @@ const Event: NextPageWithLayout = () => {
       const updatedValue = JSON.stringify(likedEvents);
       localStorage.setItem('likedEvents', updatedValue);
 
-      if (data) {
+      if (data && user) {
         try {
           const res = await client
             ?.mutation(LikeEventMutation, {
               eventId: eid,
+              userId: user.id,
             })
             .toPromise();
           console.log('res: ', res);

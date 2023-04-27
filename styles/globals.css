@@ -88,6 +88,39 @@
       background-position: -135% 0%;
     }
   }
+
+  @keyframes rainbow {
+    0% {
+      background-color: #ff6b6b; /* red */
+    }
+    20% {
+      background-color: #ffa06c; /* orange */
+    }
+    40% {
+      background-color: #f6e05e; /* yellow */
+    }
+    60% {
+      background-color: #68d391; /* green */
+    }
+    80% {
+      background-color: #63b3ed; /* blue */
+    }
+    100% {
+      background-color: #a855f7; /* purple */
+    }
+  }
+
+  .rainbow {
+    animation: rainbow 5s ease infinite;
+    transition: background-color 0.3s ease;
+  }
+
+  .rainbow:hover,
+  .rainbow:focus {
+    animation-play-state: paused;
+    background-color: #ff6b6b; /* red */
+    filter: brightness(0.95);
+  }
 }
 
 @layer utilities {

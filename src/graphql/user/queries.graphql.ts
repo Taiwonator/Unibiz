@@ -14,6 +14,7 @@ export const GetUserByIdQuery = gql(`
   query GetUserById($id: String) {
     FindUserById(id: $id) {
       name
+      interestedEventIds
       state {
         currentGroup
       }

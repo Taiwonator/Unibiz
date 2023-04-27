@@ -19,8 +19,8 @@ export const EditEventMutation = gql(`
 `);
 
 export const LikeEventMutation = gql(`
-  mutation LikeEvent($eventId: String!) {
-    likeEvent(id: $eventId) {
+  mutation LikeEvent($eventId: String!, $userId: String) {
+    likeEvent(eventId: $eventId, userId: $userId) {
       id
       likes
       name
@@ -39,5 +39,24 @@ export const AddEventImageUrlsMutation = gql(`
 export const DeleteEventImageUrlMutation = gql(`
   mutation DeleteEventImageUrl($eventId: String!, $imageUrl: String!) {
     deleteEventImageUrl(id: $eventId, imageUrl: $imageUrl)
+  }
+`);
+
+export const RecommendEventMutation = gql(`
+  mutation RecommendEvent($likedEventIds: [String!]!) {
+    RecommendEvent(likedEventIds: $likedEventIds) {
+      id
+      name
+      tags
+      date
+      thumbnailUrl
+      bannerUrl
+      society {
+        name
+        union {
+          name
+        }
+      }
+    }
   }
 `);

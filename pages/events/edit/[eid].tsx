@@ -205,7 +205,9 @@ const Edit: NextPageWithLayout = () => {
         //     },
         //   })
         // );
-        router.push(`/events/${editEventResult.data.editEvent.id}`);
+        router.push(`/events/${editEventResult.data.editEvent.id}`, undefined, {
+          shallow: false,
+        });
       } catch (err) {
         dispatchAlert({
           text: 'An error has occured',

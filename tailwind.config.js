@@ -83,6 +83,7 @@ module.exports = {
         warningdark: '#CC9A00',
         error: '#FFE4E4',
         errordark: '#BD2929',
+        yellow: '##FDD835',
       },
       fontSize: {
         'heading-xxs': '1rem',

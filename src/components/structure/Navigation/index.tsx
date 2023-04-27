@@ -78,7 +78,7 @@ const Navigation: React.FC<NavigationProps> = ({ type }) => {
       }
     }
     setGroup();
-  }, [result.data?.FindUserById?.state?.currentGroup, client, user]);
+  }, [result.data?.FindUserById?.state?.currentGroup, client]);
 
   return (
     <div
