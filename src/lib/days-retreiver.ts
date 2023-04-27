@@ -10,7 +10,9 @@ export const retrieveDays = (timestamp: string): string => {
   }
 
   const daysString =
-    diffInDays > 0 ? `${diffInDays} days to go` : `${-diffInDays} days ago`;
+    diffInDays > 0
+      ? `${diffInDays} ${diffInDays === 1 ? 'day' : 'days'} to go`
+      : `${-diffInDays} ${diffInDays === 1 ? 'day' : 'days'} ago`;
   return daysString;
 };
 

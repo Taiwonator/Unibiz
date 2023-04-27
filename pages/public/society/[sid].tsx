@@ -62,9 +62,6 @@ const Society: NextPageWithLayout = () => {
             {society?.name}
           </h3>
         )}
-        <div className="absolute top-4 left-4 z-10 md:right-4 md:left-[unset]">
-          {society && society.id && <RequestButton selectedSociety={society} />}
-        </div>
 
         {society?.imageUrl && (
           <Image
