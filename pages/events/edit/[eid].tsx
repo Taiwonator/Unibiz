@@ -266,7 +266,7 @@ const Edit: NextPageWithLayout = () => {
             }))}
             {...register('selectedTag')}
           />
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 overflow-x-scroll">
             {tags.map((tag: any) => (
               <Tag
                 key={tag}
