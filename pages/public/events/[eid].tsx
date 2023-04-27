@@ -39,7 +39,7 @@ import {
   RxSewingPin,
   RxShare1,
 } from 'react-icons/rx';
-import { EventComponent, Tags } from '.';
+import { EventComponent, Tags } from 'pages/events';
 import { useInView } from 'react-intersection-observer';
 import { Bottom } from '@components/primitive/Overlay';
 import useApp from '@hooks/useApp';
@@ -54,6 +54,7 @@ import useModal from '@hooks/useModal';
 import useNavigation from '@hooks/useNavigation';
 import makeUrl, { TCalendarEvent } from 'add-event-to-calendar';
 import moment from 'moment';
+import PublicLayout from '@components/layout/PublicLayout';
 
 const Event: NextPageWithLayout = () => {
   const router = useRouter();
@@ -416,7 +417,7 @@ const SimilarEventsComponent: React.FC<SimilarEventsComponentProps> = ({
       <ScrollableArea disabled>
         <div className="space-y-4">
           {events?.map((event: any) => (
-            <EventComponent key={event.id} {...event} />
+            <EventComponent key={event.id} {...event} isPublic />
             // <div key={event?.id}>
             //   <NextLink href={`/events/${event?.id}`} target="_blank">
             //     <ListItem
@@ -439,8 +440,6 @@ const SimilarEventsComponent: React.FC<SimilarEventsComponentProps> = ({
   );
 };
 
-Event.getLayout = (page: any) => (
-  <SocietyAdminLayout>{page}</SocietyAdminLayout>
-);
+Event.getLayout = (page: any) => <PublicLayout>{page}</PublicLayout>;
 
 export default Event;

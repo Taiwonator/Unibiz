@@ -25,6 +25,7 @@ import {
 } from 'src/graphql/society/mutations.graphql';
 import { LeaveGroupMutation } from 'src/graphql/group/mutations.graphql';
 import { GetUserByIdQuery } from 'src/graphql/user/queries.graphql';
+import Link from '@components/primitive/Link';
 
 interface NavigationProps {
   type?: 'minimal';
@@ -144,7 +145,10 @@ const MinimalLayoutContent: React.FC = () => (
     >
       <Logo className={cx('flex place-self-center', 'md:order-1')} />
     </div>
-    <h2 className="text-sm font-semibold">Admin Portal</h2>
+    <Link href="/events" className="text-sm font-semibold">
+      Admin Portal
+      <FaArrowRight />
+    </Link>
   </div>
 );
 

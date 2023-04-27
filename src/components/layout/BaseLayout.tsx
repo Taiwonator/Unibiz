@@ -60,7 +60,11 @@ const AuthProtect = ({ children }: AuthProtectProps) => {
 
   useEffect(() => {
     if (status === 'loading') return;
-    if (!session && !router.pathname.includes('signup'))
+    if (
+      !session &&
+      !router.pathname.includes('signup') &&
+      !router.pathname.includes('public')
+    )
       router.replace('/auth/signin');
 
     // society only paths

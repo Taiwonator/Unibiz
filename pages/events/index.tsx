@@ -406,6 +406,7 @@ const EventList: React.FC<EventList> = ({ events, state }) => {
 
 interface EventComponentProps extends Partial<Event> {
   editable?: boolean;
+  isPublic?: boolean;
 }
 
 export const EventComponent: React.FC<EventComponentProps> = ({
@@ -416,6 +417,7 @@ export const EventComponent: React.FC<EventComponentProps> = ({
   thumbnailUrl,
   date,
   editable,
+  isPublic,
 }) => {
   const router = useRouter();
   const { context, client } = useQueryHelpers();
@@ -457,7 +459,11 @@ export const EventComponent: React.FC<EventComponentProps> = ({
 
   return (
     <div className="flex flex-col items-start md:flex-row">
-      <NextLink className="w-full" href={`/events/${id}`} target="_blank">
+      <NextLink
+        className="w-full"
+        href={isPublic ? `/public/events/${id}` : `/events/${id}`}
+        target="_blank"
+      >
         <ListItem
           labels={{
             topLeft: <Tags tags={tags} />,
