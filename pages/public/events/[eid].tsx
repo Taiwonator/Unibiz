@@ -304,7 +304,10 @@ const DetailsComponent: React.FC<DetailsComponentProps> = ({
           label="Share Link"
           Icon={<RxShare1 />}
           Value={
-            <button className="text-xs" onClick={(e) => copyToClipboard(e)}>
+            <button
+              className="text-xs text-left break-words"
+              onClick={(e) => copyToClipboard(e)}
+            >
               {fullUrl}
             </button>
           }
