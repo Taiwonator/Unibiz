@@ -151,3 +151,27 @@ export const GetPastEvents = gql(`
     }
   }
 `);
+
+export const GetSimilarEvents = gql(`
+  query FindSimilarEvents($eventId: String!) {
+    FindSimilarEvents(eventId: $eventId) {
+      id
+      name
+      tags
+      bannerUrl
+      thumbnailUrl
+      society {
+        id
+        name
+        shortName
+        union {
+          id
+          name 
+          shortName
+        }
+      }
+      date
+      createdAt
+    }
+  }
+`);

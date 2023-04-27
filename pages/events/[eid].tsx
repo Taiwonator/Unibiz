@@ -44,7 +44,10 @@ import { useInView } from 'react-intersection-observer';
 import { Bottom } from '@components/primitive/Overlay';
 import useApp from '@hooks/useApp';
 import { useQueryHelpers } from '@hooks/useQueryHelpers';
-import { GetPastEvents } from 'src/graphql/event/queries.graphql';
+import {
+  GetPastEvents,
+  GetSimilarEvents,
+} from 'src/graphql/event/queries.graphql';
 import {
   DeleteEventImageUrlMutation,
   LikeEventMutation,
@@ -112,12 +115,12 @@ const Event: NextPageWithLayout = () => {
       if (data) {
         try {
           const getPastEventsResult = await client
-            ?.query(GetPastEvents, {
-              societyId: data.FindEventById?.society?.id,
+            ?.query(GetSimilarEvents, {
+              eventId: eid,
             })
             .toPromise();
           if (!getPastEventsResult.error) {
-            setDisplayedEvents(getPastEventsResult.data.FindPastEvents);
+            setDisplayedEvents(getPastEventsResult.data.FindSimilarEvents);
           }
         } catch (err) {
           throw err;
@@ -160,7 +163,7 @@ const Event: NextPageWithLayout = () => {
               },
               {
                 id: 'similar-events',
-                label: 'Past Events',
+                label: 'Similar Events',
                 Component: <SimilarEventsComponent events={displayedEvents} />,
               },
             ],
@@ -411,7 +414,7 @@ const SimilarEventsComponent: React.FC<SimilarEventsComponentProps> = ({
   events,
 }) => {
   if (!events?.length)
-    return <p className="text-grey3 mt-16">No previous events yet</p>;
+    return <p className="text-grey3 mt-16">No similar events yet</p>;
   return (
     <div className="space-y-8 w-full">
       <ScrollableArea disabled>
