@@ -76,11 +76,11 @@ const Event: NextPageWithLayout = () => {
     if (!liked) {
       setLiked(true);
       const likedEvents = JSON.parse(
-        sessionStorage.getItem('likedEvents') || '[]'
+        localStorage.getItem('likedEvents') || '[]'
       );
       likedEvents.push(eid);
       const updatedValue = JSON.stringify(likedEvents);
-      sessionStorage.setItem('likedEvents', updatedValue);
+      localStorage.setItem('likedEvents', updatedValue);
 
       if (data) {
         try {
@@ -101,9 +101,7 @@ const Event: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    const likedEvents = JSON.parse(
-      sessionStorage.getItem('likedEvents') || '[]'
-    );
+    const likedEvents = JSON.parse(localStorage.getItem('likedEvents') || '[]');
     if (likedEvents.includes(eid)) {
       setLiked(true);
     }
