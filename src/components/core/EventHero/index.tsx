@@ -66,7 +66,7 @@ const EventHero: React.FC<EventHeroProps> = ({
                 <FaStar className="text-positive" />
               </div>
             )}
-            {event && (
+            {event ? (
               <button
                 onClick={() =>
                   router.push(
@@ -80,17 +80,17 @@ const EventHero: React.FC<EventHeroProps> = ({
               >
                 {event?.society?.name}
               </button>
-            )}
-            {hasUnion(event) ? (
-              <>
-                <p className="text-purple">|</p>
-                <h3>{event?.society?.union?.shortName}</h3>
-              </>
             ) : (
               <span className="inline-flex items-center gap-2">
                 <FaArchive className="text-red" />
                 Archived Society :/
               </span>
+            )}
+            {hasUnion(event) && (
+              <>
+                <p className="text-purple">|</p>
+                <h3>{event?.society?.union?.shortName}</h3>
+              </>
             )}
           </div>
 

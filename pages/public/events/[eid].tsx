@@ -305,7 +305,7 @@ const DetailsComponent: React.FC<DetailsComponentProps> = ({
           Icon={<RxShare1 />}
           Value={
             <button
-              className="text-xs text-left break-words"
+              className="text-xs text-left break-words overflow-x-scroll"
               onClick={(e) => copyToClipboard(e)}
             >
               {fullUrl}
