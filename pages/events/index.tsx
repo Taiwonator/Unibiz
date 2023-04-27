@@ -527,6 +527,19 @@ const Tag: React.FC<TagProps> = ({ className, text }) => {
   );
 };
 
+// Create a function that returns the past and future events
+
+// const recommendedEvents = []
+// const setRecommendedEvents = (events: any) => {
+//   if(events) {
+//     const todayTimestamp = moment().startOf('day').valueOf();
+//     const futureEvents = events.filter((event: any) => Number(event.date) >= todayTimestamp);
+//     const sortedFutureEvents = futureEvents.sort((a: any, b: any) => a.date - b.date);
+//     const recommendedEvents = sortedFutureEvents.slice(0, 3);
+//     return recommendedEvents;
+//   }
+// }
+
 Events.getLayout = (page) => <SocietyAdminLayout>{page}</SocietyAdminLayout>;
 
 export default Events;

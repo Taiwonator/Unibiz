@@ -576,7 +576,7 @@ const GroupSelector: React.FC<GroupSelectorProps> = ({
               <div className="px-2">
                 {isGroupLeaveable() && (
                   <button
-                    className="btn btn-thin bg-black w-full"
+                    className="btn btn-thin bg-black w-full mb-2"
                     onClick={() => handleGroupLeave()}
                   >
                     {displayLeaveGroupLabel(aGroup)}
