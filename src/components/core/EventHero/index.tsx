@@ -66,7 +66,7 @@ const EventHero: React.FC<EventHeroProps> = ({
                 <FaStar className="text-positive" />
               </div>
             )}
-            {event ? (
+            {event && event.society ? (
               <button
                 onClick={() =>
                   router.push(
