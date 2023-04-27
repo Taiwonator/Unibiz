@@ -576,7 +576,9 @@ const GroupSelector: React.FC<GroupSelectorProps> = ({
           </li>
           {aGroup && (
             <>
-              {isSocietyDeleteable() && <div className="divider my-0 px-4" />}
+              {(isSocietyDeleteable() || isGroupLeaveable()) && (
+                <div className="divider my-0 px-4" />
+              )}
               <div className="px-2">
                 {isGroupLeaveable() && (
                   <button
