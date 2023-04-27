@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
 // Import React FilePond
-import { FilePond, registerPlugin, FileStatus, File } from 'react-filepond';
+import { FilePond, registerPlugin, FileStatus } from 'react-filepond';
 
 // Import FilePond styles
 import 'filepond/dist/filepond.min.css';
@@ -132,12 +132,6 @@ const Dump: NextPageWithLayout = () => {
 
     // console.group(res);
   };
-
-  const validFiles = useMemo(
-    () => files.map((file) => file.getMetadata()),
-    [files]
-  );
-  console.log(validFiles);
 
   // const createEvent = async (data: any) => {
   //   const tFile = data.thumbmailImage[0];
