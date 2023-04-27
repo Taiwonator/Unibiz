@@ -271,7 +271,7 @@ const Events: NextPageWithLayout = () => {
                     }))}
                     {...register('selectedTag')}
                   />
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-2 overflow-x-scroll">
                     {filter?.tags.map((tag: any) => (
                       <RemovableTag
                         className="bg-positive text-xs"
