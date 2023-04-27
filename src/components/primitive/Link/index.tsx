@@ -7,9 +7,10 @@ interface LinkProps {
   children?: ReactNode;
   className?: string;
   href: string;
+  shallow?: boolean;
 }
 
-const Link: React.FC<LinkProps> = ({ children, className, href }) => {
+const Link: React.FC<LinkProps> = ({ children, className, href, shallow }) => {
   return (
     <NextLink
       className={cx(
@@ -18,6 +19,7 @@ const Link: React.FC<LinkProps> = ({ children, className, href }) => {
         className
       )}
       href={href}
+      shallow={shallow}
     >
       {children}
     </NextLink>

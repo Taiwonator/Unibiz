@@ -80,6 +80,7 @@ const Event: NextPageWithLayout = () => {
   const handleLiked = async () => {
     if (!liked) {
       setLiked(true);
+      localStorage.setItem('preventMagic', JSON.stringify(false));
       const likedEvents = JSON.parse(
         localStorage.getItem('likedEvents') || '[]'
       );

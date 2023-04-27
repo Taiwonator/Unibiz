@@ -81,6 +81,9 @@ const Events: NextPageWithLayout = () => {
 
   useEffect(() => {
     setActiveNavItem('events');
+    if (localStorage.getItem('preventMagic') === String(true)) {
+      setRecomendationChecked(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -112,6 +115,7 @@ const Events: NextPageWithLayout = () => {
 
   const handleRecommendButtonClick = () => {
     setRecomendationChecked(true);
+    localStorage.setItem('preventMagic', JSON.stringify(true));
     if (recommendedEvents) {
       dispatchModal(
         <div className="space-y-4">

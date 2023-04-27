@@ -12,6 +12,7 @@ interface ListItem {
   href?: string;
   id: string;
   onClick?: () => void;
+  shallow?: boolean;
 }
 
 export const ListItem: React.FC<ListItem> = ({
@@ -20,6 +21,7 @@ export const ListItem: React.FC<ListItem> = ({
   children,
   href,
   id,
+  shallow,
   onClick,
 }) => {
   return (
@@ -33,6 +35,7 @@ export const ListItem: React.FC<ListItem> = ({
       )}
       href={href || ''}
       onClick={onClick}
+      shallow
     >
       {children}
     </Link>

@@ -168,6 +168,7 @@ const SocietyAdminListItems: React.FC = ({}) => {
         href="/events"
         id="events"
         onClick={() => setActiveNavItem('events')}
+        shallow
       >
         Events
       </ListItem>
