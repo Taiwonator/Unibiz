@@ -10,6 +10,7 @@ import {
   Event,
   EventType,
   GetAllEventsDocument,
+  GetAllEventsQueryVariables,
   useGetAllEventsQuery,
   useGetAllSocietiesQuery,
   useGetAllUnionsQuery,
@@ -76,79 +77,34 @@ const Events: NextPageWithLayout = () => {
 
   useEffect(() => {
     const updateEvents = async () => {
+      let args: GetAllEventsQueryVariables = {
+        tags: filter.tags.length ? filter.tags : null,
+      };
       if (isASociety && aGroup) {
-        // set events to society specific events
-        try {
-          const getSocietyEventsRes = await client
-            ?.query(GetAllEventsQuery, {
-              societyId: aGroup.id,
-              tags: filter.tags.length ? filter.tags : null,
-            })
-            .toPromise();
-          if (!getSocietyEventsRes.error) {
-            setDisplayedEvents(getSocietyEventsRes.data.Event);
-          }
-        } catch (err) {
-          throw err;
-        }
+        args = {
+          ...args,
+          societyId: aGroup.id,
+        };
       } else if (isAUnion && aGroup) {
-        try {
-          const getUnionEventsRes = await client
-            ?.query(GetAllEventsQuery, {
-              unionId: aGroup.id,
-              tags: filter.tags.length ? filter.tags : null,
-            })
-            .toPromise();
-          if (!getUnionEventsRes.error) {
-            setDisplayedEvents(getUnionEventsRes.data.Event);
-          }
-        } catch (err) {
-          throw err;
-        }
+        args = {
+          ...args,
+          unionId: aGroup.id,
+        };
       } else if (isAGuest) {
-        let res;
-        try {
-          if (unionId === 'unverified') {
-            res = await client?.query(GetUnverifiedEventsQuery).toPromise();
-          } else {
-            res = await client
-              ?.query(GetAllEventsQuery, {
-                societyId,
-                unionId,
-                tags: filter.tags.length ? filter.tags : null,
-              })
-              .toPromise();
-          }
-          if (!res.error) {
-            if (unionId === 'unverified') {
-              setDisplayedEvents(res.data.FindUnverifiedEvents);
-            } else {
-              setDisplayedEvents(res.data.Event);
-            }
-          }
-        } catch (err) {
-          throw err;
+        args = {
+          ...args,
+          societyId,
+          unionId,
+        };
+      }
+
+      try {
+        const res = await client?.query(GetAllEventsQuery, args).toPromise();
+        if (!res.error) {
+          setDisplayedEvents(res.data.Event);
         }
-
-        // if (unionId === 'unverified') {
-        // } else {
-        //   try {
-        //     const getAllEventsRes = await client
-        //       ?.query(GetAllEventsQuery, {
-        //         societyId,
-        //         unionId,
-        //         tags: filter.tags.length ? filter.tags : null,
-        //       })
-        //       .toPromise();
-        //     if (!getAllEventsRes.error) {
-        //       console.log('guest: ', getAllEventsRes);
-
-        //       setDisplayedEvents(getAllEventsRes.data.Event);
-        //     }
-        //   } catch (err) {
-        //     throw err;
-        //   }
-        // }
+      } catch (err) {
+        throw err;
       }
     };
 
