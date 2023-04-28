@@ -8,13 +8,21 @@ import * as yup from 'yup';
 import { useCreateUserMutation } from 'generated/graphql';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
+import useAlert from '@hooks/useAlert';
 
 export default function SignIn() {
+  const { closeAlert, dispatchAlert } = useAlert();
   const schema = yup.object().shape({
     name: yup.string().required(),
     email: yup.string().email().required(),
     // userType: yup.string().required(),
-    password: yup.string().required(),
+    password: yup
+      .string()
+      .min(8, (obj) => {
+        const valueLength = obj.value.length;
+        return `Password (length: ${valueLength}) cannot be more than ${obj.min}`;
+      })
+      .required(),
     confirmPassword: yup
       .string()
       .oneOf([yup.ref('password')], 'Passwords must match.')
@@ -23,7 +31,12 @@ export default function SignIn() {
 
   const router = useRouter();
   const [_, executeMutation] = useCreateUserMutation();
-  const { register, getValues, handleSubmit } = useForm({
+  const {
+    register,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -33,11 +46,8 @@ export default function SignIn() {
       const createUserRes = await executeMutation({
         name: getValues('name'),
         email: getValues('email'),
-        // type: getValues('userType'),
-        // type: null,
         password: getValues('password'),
       });
-      console.log(createUserRes);
       if (!createUserRes.error) {
         try {
           const signInRes = await signIn('credentials', {
@@ -50,13 +60,21 @@ export default function SignIn() {
             if (!signInRes.error) router.push('/events');
           }
         } catch (error: any) {
-          console.error(error.errors);
+          dispatchAlert({
+            text: 'An error has occured',
+            type: 'error',
+          });
         }
       }
     } catch (error: any) {
-      console.log(error);
+      dispatchAlert({
+        text: 'An error has occured',
+        type: 'error',
+      });
     }
   };
+
+  console.log(errors);
 
   return (
     <MinimialLayout>
@@ -68,7 +86,13 @@ export default function SignIn() {
           <Control
             placeholder="James Doe"
             label="Full Name"
-            labels={{ bottomLeft: 'Name must be maximum 40 characters' }}
+            labels={{
+              bottomLeft: errors && errors.name && (
+                <span className="text-red font-bold">
+                  {String(errors?.name?.message)}
+                </span>
+              ),
+            }}
             type="text"
             {...register('name')}
           />
@@ -77,34 +101,30 @@ export default function SignIn() {
             placeholder="james.doe@gmai.com"
             label="Email"
             type="text"
+            labels={{
+              bottomLeft: errors && errors.email && (
+                <span className="text-red font-bold">
+                  {String(errors?.email?.message)}
+                </span>
+              ),
+            }}
             {...register('email')}
           />
-
-          {/* <Control
-            placeholder="pick a user type"
-            classNames={{
-              input: 'select-bordered',
-            }}
-            label="User Type"
-            type="select"
-            options={[
-              {
-                label: 'Society Admin',
-                value: 'society_admin',
-              },
-              {
-                label: 'Union Admin',
-                value: 'union_admin',
-              },
-            ]}
-            {...register('userType')}
-          /> */}
 
           <Control
             placeholder="**********"
             label="Password"
             type="password"
-            labels={{ bottomLeft: 'Password must follow undecided rule ;)' }}
+            labels={{
+              bottomLeft:
+                errors && errors.password ? (
+                  <span className="text-red font-bold">
+                    {String(errors?.password?.message)}
+                  </span>
+                ) : (
+                  'Password must be at least 8 characters long'
+                ),
+            }}
             {...register('password')}
           />
 
@@ -112,6 +132,16 @@ export default function SignIn() {
             placeholder="**********"
             label="Repeat Password"
             type="password"
+            labels={{
+              bottomLeft:
+                errors && errors.confirmPassword ? (
+                  <span className="text-red font-bold">
+                    {String(errors?.confirmPassword?.message)}
+                  </span>
+                ) : (
+                  'Password must be at least 8 characters long'
+                ),
+            }}
             {...register('confirmPassword')}
           />
 

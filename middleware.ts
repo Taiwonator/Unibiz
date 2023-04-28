@@ -5,18 +5,11 @@ import { withAuth } from 'next-auth/middleware';
 import { NextApiRequestCookies, redirect } from 'next/dist/server/api-utils';
 import { NextResponse } from 'next/server';
 
-export default withAuth(
-  async function middleware(req) {
-    const authHeader = req.headers;
-    // const token = authHeader && authHeader.split(' ')[1];
-    // console.log('token: ', authHeader);
+export default withAuth({
+  callbacks: {
+    authorized: ({ token }) => !!token,
   },
-  {
-    callbacks: {
-      authorized: ({ token }) => !!token,
-    },
-  }
-);
+});
 
 export const config = {
   matcher: [

@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import { forwardRef, LegacyRef } from 'react';
+import { forwardRef, LegacyRef, ReactNode } from 'react';
 
 type ControlTypes =
   | 'date'
@@ -22,9 +22,9 @@ export interface ControlProps extends TextInputProps {
     input?: string;
     labelBottomLeft?: string;
   };
-  label?: string;
+  label?: string | ReactNode;
   labels?: {
-    bottomLeft?: string;
+    bottomLeft?: string | ReactNode;
   };
   options?: Option[];
   required?: boolean;
