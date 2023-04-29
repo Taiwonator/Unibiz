@@ -63,7 +63,8 @@ const AuthProtect = ({ children }: AuthProtectProps) => {
     if (
       !session &&
       !router.pathname.includes('signup') &&
-      !router.pathname.includes('public')
+      !router.pathname.includes('public') &&
+      !router.pathname.includes('signin')
     )
       router.replace('/auth/signin');
 

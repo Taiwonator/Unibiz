@@ -101,7 +101,7 @@ export const authOptions: AuthOptions = (req, res) => ({
         );
         return true;
       }
-      return false;
+      return true;
     },
     async jwt({ token, user }) {
       if (user) {
