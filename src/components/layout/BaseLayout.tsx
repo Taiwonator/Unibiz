@@ -67,12 +67,12 @@ const AuthProtect = ({ children }: AuthProtectProps) => {
     )
       router.replace('/auth/signin');
 
-    // society only paths
     if (societyOnlyPaths.includes(router.pathname) && !isASociety) {
       router.replace('/events');
     }
 
-    // admin only paths
+    // Add union only paths
+
     if (adminOnlyPaths.includes(router.pathname) && isAGuest) {
       router.replace('/events');
     }

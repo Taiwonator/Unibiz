@@ -13,6 +13,9 @@ import {
   GetUserByEmail,
   GetUserByIdQuery,
 } from 'src/graphql/user/queries.graphql';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 type AuthOptions = (
   req: NextApiRequest,
@@ -61,7 +64,7 @@ export const authOptions: AuthOptions = (req, res) => ({
           'Set-Cookie',
           `custom.access_token=${returnedJWT};path=/;Domain=${
             process.env.NEXT_PUBLIC_API_DOMAIN
-          };httpOnly=true;expires=${expires.toUTCString()}`
+          };httpOnly=true;expires=${expires.toUTCString()}; Secure`
         );
 
         return { ...payload };
@@ -89,11 +92,12 @@ export const authOptions: AuthOptions = (req, res) => ({
           throw new Error('Invalid credentials');
         }
         const expires = new Date(payload.exp * 1000); // Convert from seconds to milliseconds
+
         res.setHeader(
           'Set-Cookie',
           `custom.access_token=${returnedJWT};path=/;Domain=${
             process.env.NEXT_PUBLIC_API_DOMAIN
-          };httpOnly=true;expires=${expires.toUTCString()}`
+          };httpOnly=true;expires=${expires.toUTCString()}; Secure`
         );
         return true;
       }
@@ -131,7 +135,7 @@ export const authOptions: AuthOptions = (req, res) => ({
     async signOut() {
       res.setHeader(
         'Set-Cookie',
-        `custom.access_token=deleted;path=/;Domain=${process.env.NEXT_PUBLIC_API_DOMAIN};httpOnly=true;Max-Age=0`
+        `custom.access_token=deleted;path=/;Domain=localhost;httpOnly=true;Max-Age=0`
       );
     },
   },
