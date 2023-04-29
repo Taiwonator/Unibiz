@@ -88,12 +88,11 @@ export const authOptions: AuthOptions = (req, res) => ({
         if (!returnedJWT) {
           throw new Error('Invalid credentials');
         }
+        console.log(process.env.NEXT_PUBLIC_API_DOMAIN);
         const expires = new Date(payload.exp * 1000); // Convert from seconds to milliseconds
         res.setHeader(
           'Set-Cookie',
-          `custom.access_token=${returnedJWT};path=/;Domain=${
-            process.env.NEXT_PUBLIC_API_DOMAIN
-          };httpOnly=true;expires=${expires.toUTCString()}`
+          `custom.access_token=${returnedJWT};path=/;Domain=p02--resource-server--zjxk89vfl658.code.run;httpOnly=true;expires=${expires.toUTCString()}`
         );
         return true;
       }
@@ -127,11 +126,12 @@ export const authOptions: AuthOptions = (req, res) => ({
       return { ...session };
     },
   },
+
   events: {
     async signOut() {
       res.setHeader(
         'Set-Cookie',
-        `custom.access_token=deleted;path=/;Domain=${process.env.NEXT_PUBLIC_API_DOMAIN};httpOnly=true;Max-Age=0`
+        `custom.access_token=deleted;path=/;Domain=p02--resource-server--zjxk89vfl658.code.run;httpOnly=true;Max-Age=0`
       );
     },
   },
