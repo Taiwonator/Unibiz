@@ -64,7 +64,7 @@ export const authOptions: AuthOptions = (req, res) => ({
           'Set-Cookie',
           `custom.access_token=${returnedJWT};path=/;Domain=${
             process.env.NEXT_PUBLIC_API_DOMAIN
-          };httpOnly=true;expires=${expires.toUTCString()}; SameSite=None; Secure`
+          };httpOnly=true;expires=${expires.toUTCString()};SameSite=None;Secure`
         );
 
         return { ...payload };
@@ -97,7 +97,7 @@ export const authOptions: AuthOptions = (req, res) => ({
           'Set-Cookie',
           `custom.access_token=${returnedJWT};path=/;Domain=${
             process.env.NEXT_PUBLIC_API_DOMAIN
-          };httpOnly=true;expires=${expires.toUTCString()}; SameSite=None; Secure`
+          };httpOnly=true;expires=${expires.toUTCString()};SameSite=None;Secure`
         );
         return true;
       }
