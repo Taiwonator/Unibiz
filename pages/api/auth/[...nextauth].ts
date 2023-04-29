@@ -133,9 +133,13 @@ export const authOptions: AuthOptions = (req, res) => ({
   },
   events: {
     async signOut() {
+      // res.setHeader(
+      //   'Set-Cookie',
+      //   `custom.access_token=deleted;path=/;Domain=localhost;httpOnly=true;Max-Age=0`
+      // );
       res.setHeader(
         'Set-Cookie',
-        `custom.access_token=deleted;path=/;Domain=localhost;httpOnly=true;Max-Age=0`
+        `custom.access_token=deleted;path=/;Domain=${process.env.NEXT_PUBLIC_API_DOMAIN};httpOnly=true;expires=Max-Age=0;SameSite=None;Secure`
       );
     },
   },
